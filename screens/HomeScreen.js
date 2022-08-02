@@ -15,10 +15,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 console.log(data);
 console.log(data.map(dat=>  dat.img));
-// for(let i of cardData){
-//     console.log(i);
-// }
-// console.log(cardData.map(dat=>  dat.name));
 <script src="http://localhost:8097"></script>
     const HomeScreen = ({navigation}) => {
         useEffect(() => {

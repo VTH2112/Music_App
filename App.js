@@ -1,112 +1,101 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
 
+// import React from 'react';
+// import {SafeAreaView,ScrollView,StatusBar,StyleSheet,Text,useColorScheme,View,} from 'react-native';
+// import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+// import {NavigationContainer} from '@react-navigation/native';
+// import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+// import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
+// const Tab = createBottomTabNavigator();
+// const App = () => {
+//   return ( 
+//     <NavigationContainer>
+
+
+//     </NavigationContainer>  
+//   )
+// };
+
+
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
+
+// export default App
+<script src="http://localhost:8097"></script>
 import React from 'react';
-import type {Node} from 'react';
-import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  useColorScheme,
-  View,
-} from 'react-native';
+import {SafeAreaView,ScrollView,StatusBar,StyleSheet,Text,useColorScheme,View,} from 'react-native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs'
+import {NavigationContainer} from '@react-navigation/native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import HomeScreen from './screens/HomeScreen';
+import SearchScreen from './screens/SearchScreen';
+import LibraryScreen from './screens/LibraryScreen';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
+
+
+const Tab = createBottomTabNavigator()
+
+const App = () => {
+
+  return ( 
+    <NavigationContainer>
+      <Tab.Navigator initialRouteHome = "Home"
+        screenOptions={{
+          tabBarStyle:{
+            height: 65,
+            paddingTop: 10,
+            borderTopWidth: 0,
+            backgroundColor: 'rgb(0,0,0)',
           },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
+          tabBarLabelStyle:{
+            marginBottom:5,
+            paddingBottom:5,
+            fontSize: 10,
+            fontWeight:"bold",
           },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+          tabBarActiveTintColor:"white",
 
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+        }}
+      >
+        <Tab.Screen name="Home" component={HomeScreen}
+          options={{
+            tabBarIcon: ({color,size}) => {
+             return <MaterialIcons name="home" size={30} color={color} />
+            },
+          }}
+        />
+        <Tab.Screen name="Search" component={SearchScreen} 
+             options={{
+              tabBarIcon: ({color,size}) => (
+                <MaterialIcons name="search" size={30} color={color} />
+              )
+            }}
+        />
+        <Tab.Screen name="Library" component={LibraryScreen}
+        
+        options={{
+          tabBarIcon: ({color,size}) => (
+            <MaterialIcons name="my-library-music" size={30} color={color} />
+          )
+        }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>  
+  )
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-});
 
-export default App;
+
+})
+
+export default App

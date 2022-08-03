@@ -37,6 +37,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import LibraryScreen from './screens/LibraryScreen';
+import LoginScreen from './screens/LoginScreen';
+import RegisterScreen from './screens/LoginScreen';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
@@ -66,6 +68,14 @@ const App = () => {
 
         }}
       >
+        <Tab.Screen name="Login" component={LoginScreen}
+          options={{
+            tabBarIcon: ({color,size}) => {
+             return <MaterialIcons name="home" size={30} color={color} />
+            },
+          }}
+        />
+
         <Tab.Screen name="Home" component={HomeScreen}
           options={{
             tabBarIcon: ({color,size}) => {

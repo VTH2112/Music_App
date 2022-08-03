@@ -19,7 +19,8 @@
     "react-native-screens": "^3.15.0",
     "react-native-svg-path-gradient": "^0.4.0",
     "react-native-track-player": "^2.2.0-rc4",
-    "react-native-vector-icons": "^9.2.0"
+    "react-native-vector-icons": "^9.2.0",
+    "react-navigation": "^4.4.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

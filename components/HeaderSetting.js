@@ -3,8 +3,6 @@ import React from 'react';
 import { IconButton, MD3Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-
-
 const HeaderSetting = () => {
     const navigation = useNavigation();
     return (
@@ -23,7 +21,6 @@ const HeaderSetting = () => {
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     topCont: {
         flexDirection: 'row',
@@ -34,14 +31,14 @@ const styles = StyleSheet.create({
     },
     icon: {
         marginLeft: 5,
-        marginRight:120,
-        marginTop:0,
-        marginBottom:0,
+        marginRight: 120,
+        marginTop: 0,
+        marginBottom: 0,
     },
     text: {
         color: 'white',
         fontSize: 20,
-    
+
     },
     header: {
         flexDirection: 'row',

@@ -163,7 +163,7 @@ const showCardData =
         },
     ]
 
-    const MixCardData =
+const MixCardData =
 
     [
         {
@@ -280,4 +280,4 @@ const showCardData =
         },
     ]
 
-export { cardData, showCardData ,MixCardData};
+export { cardData, showCardData, MixCardData };

@@ -1,21 +1,24 @@
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React from 'react';
 import LibraryScreen from '../screens/LibraryScreen';
-
-const PlaylistCard = ({ img, name }) => {
+import { useNavigation } from '@react-navigation/native';
+import { cardData, showCardData, MixCardData } from '../data/Data';
+import MusicPlayerScreen from '../screens/MusicPlayer';
+const PlaylistCard = ({ img, name, duration, singer }) => {
     console.log(img);
+    const nav = useNavigation();
     return (
-
         <View style={styles.container}>
-            <Image style={{ height: 60, width: 60 }} source={require("../assets/img/songs/13.webp")} />
-            <View style={styles.textCont} component={LibraryScreen}>
-                <Text style={styles.text}>{name}</Text>
-            </View>
+
+            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer })} style={styles.container}>
+                <Image style={{ height: 60, width: 60 }} source={require("../assets/img/songs/13.webp")} />
+                <View style={styles.textCont} component={LibraryScreen}>
+                    <Text style={styles.text}>{name}</Text>
+                </View>
+            </Pressable>
         </View>
     )
 }
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,

@@ -3,7 +3,6 @@ import React from 'react';
 import { IconButton, MD3Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-
 const Header = () => {
     const navigation = useNavigation();
     return (
@@ -12,16 +11,14 @@ const Header = () => {
                 <Text style={styles.text}>To get you started</Text>
             </View>
             <View style={styles.iconCont}>
-
                 <IconButton style={styles.icon}
                     icon="bell-outline"
                     color="white"
                     size={30}
                     onPress={() => {
-                        navigation.navigate('MusicPlayer')
+                        navigation.navigate('NotiScreen')
                     }}
                 />
-
                 <IconButton style={styles.icon}
                     icon="history"
                     color="white"
@@ -35,11 +32,9 @@ const Header = () => {
                     onPress={() => { navigation.navigate('SettingScreen') }}
                 />
             </View>
-
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     topCont: {
         flexDirection: 'row',

@@ -1,7 +1,7 @@
 
 <script src="http://localhost:8097"></script>
 import React, { useEffect } from 'react';
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View, } from 'react-native';
+import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import { NavigationContainer, StackActions } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -17,15 +17,8 @@ import NotiScreen from './screens/NotiScreen';
 import HistoryScreen from './screens/HistoryScreen';
 import SettingScreen from './screens/SettingScreen';
 
-
-
-import Icon from 'react-native-vector-icons/FontAwesome5';
-
-
-
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
-
 
 const HomeStack = ({ navigation }) => {
   useEffect(() => {
@@ -34,31 +27,20 @@ const HomeStack = ({ navigation }) => {
     });
   }, [])
   return (
-
-
     <Stack.Navigator initialRouteName='Home'>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} />
-      <Stack.Screen name="NotiScreen" component={NotiScreen} />
-      <Stack.Screen name="HistoryScreen" component={HistoryScreen} />
-      <Stack.Screen name="SettingScreen" component={SettingScreen} />
+      <Stack.Screen name="HomeStack" component={HomeScreen} option={{ title: 'Home' }} />
+      <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} option={{ title: 'MusicPlayer' }} />
+      <Stack.Screen name="NotiScreen" component={NotiScreen} option={{ title: 'NotiScreen' }} />
+      <Stack.Screen name="HistoryScreen" component={HistoryScreen} option={{ title: 'HistoryScreen' }} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} option={{ title: 'SettingScreen' }} />
     </Stack.Navigator>
 
   )
 }
-
-
-
-
 export default function App() {
-
   return (
-
-
     <NavigationContainer >
       <Tab.Navigator
-
-
         screenOptions={{
           tabBarStyle: {
             height: 65,
@@ -67,7 +49,6 @@ export default function App() {
             backgroundColor: 'rgba(52, 52, 52, 0.8)',
             position: 'absolute',
             elevation: 0,
-
           },
           tabBarLabelStyle: {
             marginBottom: 5,
@@ -76,9 +57,7 @@ export default function App() {
             fontWeight: "bold",
           },
           tabBarActiveTintColor: "white",
-
         }}
-
       >
         <Tab.Screen name="Home" component={HomeStack}
           options={{
@@ -87,9 +66,6 @@ export default function App() {
             },
           }}
         />
-
-
-
         <Tab.Screen name="Search" component={SearchScreen}
           options={{
             tabBarIcon: ({ color, size }) => (
@@ -114,10 +90,7 @@ export default function App() {
           }}
         />
       </Tab.Navigator>
-
     </NavigationContainer >
-
-
   )
 }
 

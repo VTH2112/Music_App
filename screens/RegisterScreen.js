@@ -1,6 +1,6 @@
-import React, {useState, useContext} from "react";
-import {useNavigation} from '@react-navigation/native'
-import {View, Text, Button, TextInput, Pressable, StyleSheet, Settings, Alert } from "react-native";
+import React, { useState, useContext } from "react";
+import { useNavigation } from '@react-navigation/native'
+import { View, Text, Button, TextInput, Pressable, StyleSheet, Settings, Alert } from "react-native";
 import axiosIntance, { updateToken } from "../apis/axios";
 import { AuthContext } from "../context/auth";
 import { response } from "express";
@@ -8,14 +8,14 @@ import { white } from "react-native-paper/lib/typescript/styles/colors";
 import { color } from "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {KeyboardAvoidingView} from 'react-native'
+import { KeyboardAvoidingView } from 'react-native'
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview"
 
-const RegisterScreen = () =>{
-    const [username, setUername]= useState('');
-    const [password, setPassword]= useState('');
-    const [passwordcfm, setPasswordcfm]= useState('');
-    const [email, setEmail]= useState('');
+const RegisterScreen = () => {
+    const [username, setUername] = useState('');
+    const [password, setPassword] = useState('');
+    const [passwordcfm, setPasswordcfm] = useState('');
+    const [email, setEmail] = useState('');
     const [message, setMessage] = useState('');
     const [submit, setSubmit] = useState(false);
     const userCtx = useContext(AuthContext)
@@ -26,27 +26,27 @@ const RegisterScreen = () =>{
     const validateUsername = (Inusername) => {
         const reg = /^[a-z0-9_-]{3,15}$/;
         return reg.test(Inusername)
-      };
+    };
     const validateEmail = (Inemail) => {
         const reg = /\S+@\S+\.\S+/
         return reg.test(Inemail);
-      };
+    };
     const validatePassword = (Inpassword) => {
         const reg = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/
         return reg.test(Inpassword);
     };
     const validatePasswordcfm = (Inpasswword, Inpasswordcfm) => {
-       if (Inpasswword !== Inpasswordcfm) {
-        return false;
-       } 
-       return true;
+        if (Inpasswword !== Inpasswordcfm) {
+            return false;
+        }
+        return true;
     };
-    const validating = async()=> {
+    const validating = async () => {
         let err = true;
-        if ( await !validateUsername(username)) {
+        if (await !validateUsername(username)) {
             setMessage('USER NAME IS INVALID, INPUT AGAIN');
             err = false;
-        } 
+        }
         if (err && await !validateEmail(email)) {
             setMessage('EMAIL ADDRESS IS INVALID, INPUT AGAIN');
             err = false;
@@ -65,22 +65,21 @@ const RegisterScreen = () =>{
         return err;
     }
 
-    const handbleSubmit = async() =>{  
+    const handbleSubmit = async () => {
         let err = true;
         let errms = '';
-        if  (submit) {
+        if (submit) {
             err = await validating();
-            try 
-             {
-                if (await validating)  {
+            try {
+                if (await validating) {
                     try {
-                        const res =  await axiosIntance.post('auth/signup', {
+                        const res = await axiosIntance.post('auth/signup', {
                             username: username,
                             password: password,
                             email: email,
-        
+
                         })
-                        const resLogin =  await axiosIntance.post('auth/signin', {
+                        const resLogin = await axiosIntance.post('auth/signin', {
                             username: username,
                             password: password
                         })
@@ -92,7 +91,7 @@ const RegisterScreen = () =>{
                         setMessage('CAN NOT REGISTER NOW');
                     }
                 }
-             }
+            }
             catch (e) {
                 console.log(e)
             }
@@ -101,95 +100,95 @@ const RegisterScreen = () =>{
     const HandlerEndEditting = () => {
         if (!username || !password || !passwordcfm || !email) {
             setSubmit(false)
-        }  else {
+        } else {
             setSubmit(true)
         }
     }
     // const validate= () => {
 
     // }
-        
-    return(
-        <KeyboardAwareScrollView style = {styles.container} behavior="height" > 
+
+    return (
+        <KeyboardAwareScrollView style={styles.container} behavior="height" >
             <View >
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>User Name</Text>
+                <View style={styles.block}>
+                    <Text style={styles.title}>User Name</Text>
                     <TextInput
-                            value = {username}
-                            style = {styles.input}
-                            onChangeText = {
-                                newText =>{
-                                    setUername(newText);
-                                }
+                        value={username}
+                        style={styles.input}
+                        onChangeText={
+                            newText => {
+                                setUername(newText);
                             }
-                            onEndEditing = {
-                                HandlerEndEditting  
-                            }
-                            maxLength ={20}
-                            />
-                    
+                        }
+                        onEndEditing={
+                            HandlerEndEditting
+                        }
+                        maxLength={20}
+                    />
+
                 </View>
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>Email</Text>
+                <View style={styles.block}>
+                    <Text style={styles.title}>Email</Text>
                     <TextInput
-                            value = {email}
-                            style = {styles.input}
-                            onChangeText = {
-                                newText =>{
-                                    setEmail(newText);
-                                }
+                        value={email}
+                        style={styles.input}
+                        onChangeText={
+                            newText => {
+                                setEmail(newText);
                             }
-                            onEndEditing = {
-                                HandlerEndEditting  
-                            }
-                            maxLength ={20}
-                            />
-                    
+                        }
+                        onEndEditing={
+                            HandlerEndEditting
+                        }
+                        maxLength={20}
+                    />
+
                 </View>
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>Password</Text>
+                <View style={styles.block}>
+                    <Text style={styles.title}>Password</Text>
                     <TextInput
-                            value = {password}
-                            style = {styles.input}
-                            password={true} 
-                            secureTextEntry={true}
-                            onChangeText = {
-                                newText =>{
-                                    setPassword(newText);
-                                }
+                        value={password}
+                        style={styles.input}
+                        password={true}
+                        secureTextEntry={true}
+                        onChangeText={
+                            newText => {
+                                setPassword(newText);
                             }
-                            onEndEditing = {
-                                HandlerEndEditting  
-                            }
-                            maxLength ={20}
+                        }
+                        onEndEditing={
+                            HandlerEndEditting
+                        }
+                        maxLength={20}
                     />
                 </View>
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>Confirm the password </Text>
+                <View style={styles.block}>
+                    <Text style={styles.title}>Confirm the password </Text>
                     <TextInput
-                            value = {passwordcfm}
-                            style = {styles.input}
-                            password={true} 
-                            secureTextEntry={true}
-                            onChangeText = {
-                                newText =>{
-                                    setPasswordcfm(newText); 
-                                }
+                        value={passwordcfm}
+                        style={styles.input}
+                        password={true}
+                        secureTextEntry={true}
+                        onChangeText={
+                            newText => {
+                                setPasswordcfm(newText);
                             }
-                            onEndEditing = {
-                                HandlerEndEditting  
-                            }
-                            maxLength ={20}
+                        }
+                        onEndEditing={
+                            HandlerEndEditting
+                        }
+                        maxLength={20}
                     />
                 </View>
-                <Text style= {{color: 'white', marginBottom: 20, fontSize: 15}}>
+                <Text style={{ color: 'white', marginBottom: 20, fontSize: 15 }}>
                     {message}
                 </Text>
-                <Pressable onPress={handbleSubmit} style= {submit ?  (styles.buttonEnable) : (styles.buttonDisable)}  >
-                    <Text  style= {submit ?  (styles.textEnable) : (styles.textDisable)} >Register</Text>
+                <Pressable onPress={handbleSubmit} style={submit ? (styles.buttonEnable) : (styles.buttonDisable)}  >
+                    <Text style={submit ? (styles.textEnable) : (styles.textDisable)} >Register</Text>
                 </Pressable>
-                <Pressable onPress={gotoRegister} style = {styles.button}>
-                    <Text style ={styles.text}>Go to Login</Text>
+                <Pressable onPress={gotoRegister} style={styles.button}>
+                    <Text style={styles.text}>Go to Login</Text>
                 </Pressable>
             </View>
         </KeyboardAwareScrollView>
@@ -206,16 +205,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
     },
-    input:{
+    input: {
         backgroundColor: 'gray',
         borderRadius: 5,
         color: 'white',
         fontSize: 20
     },
-    block:{
+    block: {
         marginBottom: 40,
     },
-    buttonEnable:{
+    buttonEnable: {
         width: 200,
         height: 50,
         borderRadius: 20,
@@ -223,10 +222,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-    marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    buttonDisable:{
+    buttonDisable: {
         width: 200,
         height: 50,
         borderRadius: 20,
@@ -234,25 +233,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-        marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    textEnable:{
+    textEnable: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'black'
     },
-    textDisable:{
+    textDisable: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'gray'
     },
-    text:{
+    text: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white'
     },
-    button:{
+    button: {
         width: 150,
         height: 25,
         borderRadius: 20,
@@ -262,12 +261,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-        marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginTop: 50
     },
 
 
-    
+
 })
 export default RegisterScreen;

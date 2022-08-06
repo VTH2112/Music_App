@@ -1,6 +1,6 @@
-import React, {useState, useContext} from "react";
-import {useNavigation} from '@react-navigation/native'
-import {View, Text, Button, TextInput, Pressable, StyleSheet, Settings} from "react-native";
+import React, { useState, useContext } from "react";
+import { useNavigation } from '@react-navigation/native'
+import { View, Text, Button, TextInput, Pressable, StyleSheet, Settings } from "react-native";
 import axiosIntance, { updateToken } from "../apis/axios";
 import { AuthContext } from "../context/auth";
 import { response } from "express";
@@ -10,9 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
 
-const LoginScreen = () =>{
-    const [username, setUername]= useState('');
-    const [password, setPassword]= useState('');
+const LoginScreen = () => {
+    const [username, setUername] = useState('');
+    const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [submit, setSubmit] = useState(false);
     const userCtx = useContext(AuthContext)
@@ -20,9 +20,9 @@ const LoginScreen = () =>{
     const gotoRegister = () => {
         navigation.navigate("RegisterScreen");
     }
-    const handbleSubmit = async() =>{  
-        if  (submit) {
-            const res =  await axiosIntance.post('auth/signin', {
+    const handbleSubmit = async () => {
+        if (submit) {
+            const res = await axiosIntance.post('auth/signin', {
                 username: username,
                 password: password
             }).catch(error => setMessage("USER NAME OR PASSWORD IS INCORRECT"))
@@ -32,46 +32,46 @@ const LoginScreen = () =>{
             AsyncStorage.setItem('token', res.token)
         }
     };
-        
-    return(
-        <KeyboardAwareScrollView style = {styles.container}>
+
+    return (
+        <KeyboardAwareScrollView style={styles.container}>
             <View  >
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>User Name</Text>
+                <View style={styles.block}>
+                    <Text style={styles.title}>User Name</Text>
                     <TextInput
-                            value = {username}
-                            style = {styles.input}
-                            onChangeText = {
-                                newText =>{
-                                    setUername(newText);
-                                    if (newText && password) {setSubmit(true)} else {setSubmit(false)};
-                                }
-                            } />
-                    
-                </View>
-                <View style = {styles.block}>
-                    <Text style = {styles.title}>Password</Text>
-                    <TextInput
-                            value = {password}
-                            style = {styles.input}
-                            password={true} 
-                            secureTextEntry={true}
-                            onChangeText = {
-                                newText =>{
-                                    setPassword(newText);
-                                    if (newText && username) {setSubmit(true)} else {setSubmit(false)};  
-                                }
+                        value={username}
+                        style={styles.input}
+                        onChangeText={
+                            newText => {
+                                setUername(newText);
+                                if (newText && password) { setSubmit(true) } else { setSubmit(false) };
                             }
+                        } />
+
+                </View>
+                <View style={styles.block}>
+                    <Text style={styles.title}>Password</Text>
+                    <TextInput
+                        value={password}
+                        style={styles.input}
+                        password={true}
+                        secureTextEntry={true}
+                        onChangeText={
+                            newText => {
+                                setPassword(newText);
+                                if (newText && username) { setSubmit(true) } else { setSubmit(false) };
+                            }
+                        }
                     />
                 </View>
-                <Text style= {{color: 'white', marginBottom: 20, fontSize: 15}}>
+                <Text style={{ color: 'white', marginBottom: 20, fontSize: 15 }}>
                     {message}
                 </Text>
-                <Pressable onPress={handbleSubmit} style= {submit ?  (styles.buttonEnable) : (styles.buttonDisable)}  >
-                    <Text  style= {submit ?  (styles.textEnable) : (styles.textDisable)} >LOGIN</Text>
+                <Pressable onPress={handbleSubmit} style={submit ? (styles.buttonEnable) : (styles.buttonDisable)}  >
+                    <Text style={submit ? (styles.textEnable) : (styles.textDisable)} >LOGIN</Text>
                 </Pressable>
-                <Pressable onPress={gotoRegister} style = {styles.button}>
-                    <Text style ={styles.text}>Go to Register</Text>
+                <Pressable onPress={gotoRegister} style={styles.button}>
+                    <Text style={styles.text}>Go to Register</Text>
                 </Pressable>
             </View>
         </KeyboardAwareScrollView>
@@ -88,16 +88,16 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 30,
     },
-    input:{
+    input: {
         backgroundColor: 'gray',
         borderRadius: 5,
         color: 'white',
         fontSize: 20
     },
-    block:{
+    block: {
         marginBottom: 50,
     },
-    buttonEnable:{
+    buttonEnable: {
         width: 200,
         height: 50,
         borderRadius: 20,
@@ -105,10 +105,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-    marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    buttonDisable:{
+    buttonDisable: {
         width: 200,
         height: 50,
         borderRadius: 20,
@@ -116,25 +116,25 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-        marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
     },
-    textEnable:{
+    textEnable: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'black'
     },
-    textDisable:{
+    textDisable: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'gray'
     },
-    text:{
+    text: {
         fontWeight: 'bold',
         fontSize: 15,
         color: 'white'
     },
-    button:{
+    button: {
         width: 150,
         height: 25,
         borderRadius: 20,
@@ -144,12 +144,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft:'auto',
-        marginRight:'auto',
+        marginLeft: 'auto',
+        marginRight: 'auto',
         marginTop: 50
     },
 
 
-    
+
 })
 export default LoginScreen;

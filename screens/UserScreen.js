@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View, ScrollView, Button, Image } from 'react-native';
 import React, { useEffect } from 'react';
 import HeaderUser from '../components/headerUser';
-import SignInScreen from './signInScreen';
-import SignUpScreen from './signUpScreen';
+import SignInScreen from './LoginScreen';
+import SignUpScreen from './RegisterScreen';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -29,7 +29,7 @@ const UserScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.btn} >
                             <Button
-                                onPress={() => { nav.navigate('SignInScreen') }}
+                                onPress={() => { nav.navigate('LoginScreen') }}
                                 title="Sign In"
                                 color="black"
                                 style={styles.signInBtn}
@@ -37,7 +37,7 @@ const UserScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.btn} >
                             <Button
-                                onPress={() => { nav.navigate('SignUpScreen') }}
+                                onPress={() => { nav.navigate('RegisterScreen') }}
                                 title="Sign Up"
                                 color="black"
                                 style={styles.signUpBtn}

@@ -1,5 +1,4 @@
 
-<script src="http://localhost:8097"></script>
 import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
@@ -11,11 +10,15 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import HomeScreen from './screens/HomeScreen';
 import SearchScreen from './screens/SearchScreen';
 import LibraryScreen from './screens/LibraryScreen';
-import PremiumScreen from './screens/PremiumScreen';
-import MusicPlayerScreen from './screens/MusicPlayer';
-import NotiScreen from './screens/NotiScreen';
-import HistoryScreen from './screens/HistoryScreen';
-import SettingScreen from './screens/SettingScreen';
+import UserScreen from './screens/UserScreen';
+import MusicPlayerScreen from './screens/musicPlayerHomeScreen/MusicPlayer';
+import NotiScreen from './screens/musicPlayerHomeScreen/NotiScreen';
+import HistoryScreen from './screens/musicPlayerHomeScreen/HistoryScreen';
+import SettingScreen from './screens/musicPlayerHomeScreen/SettingScreen';
+import userScreen from './screens/UserScreen';
+import SignInScreen from './screens/signInScreen';
+import SignUpScreen from './screens/signUpScreen';
+
 
 const Tab = createBottomTabNavigator()
 const Stack = createNativeStackNavigator()
@@ -32,6 +35,23 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} option={{ title: 'MusicPlayer' }} />
       <Stack.Screen name="NotiScreen" component={NotiScreen} option={{ title: 'NotiScreen' }} />
       <Stack.Screen name="HistoryScreen" component={HistoryScreen} option={{ title: 'HistoryScreen' }} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} option={{ title: 'SettingScreen' }} />
+    </Stack.Navigator>
+
+  )
+}
+
+const UserStack = ({ navigation }) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [])
+  return (
+    <Stack.Navigator initialRouteName='User'>
+      <Stack.Screen name="UserStack" component={userScreen} option={{ title: 'User' }} />
+      <Stack.Screen name="SignInScreen" component={SignInScreen} option={{ title: 'SignIn' }} />
+      <Stack.Screen name="SignUpScreen" component={SignUpScreen} option={{ title: 'SignUp' }} />
       <Stack.Screen name="SettingScreen" component={SettingScreen} option={{ title: 'SettingScreen' }} />
     </Stack.Navigator>
 
@@ -81,11 +101,11 @@ export default function App() {
             )
           }}
         />
-        <Tab.Screen name="Premium" component={PremiumScreen}
+        <Tab.Screen name="User" component={UserStack}
 
           options={{
             tabBarIcon: ({ color, size }) => (
-              <MaterialCommunityIcons name="spotify" size={30} color={color} />
+              <MaterialCommunityIcons name="account" size={30} color={color} />
             )
           }}
         />

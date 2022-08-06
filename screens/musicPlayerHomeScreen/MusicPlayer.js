@@ -1,12 +1,14 @@
 import { StyleSheet, Text, View, ScrollView, Image } from 'react-native';
 import React, { useEffect } from 'react';
-import HeaderCard from '../components/HeaderCard';
+import HeaderCard from '../../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient'
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
-import ListMusic from '../components/listMusic';
-import { cardData, showCardData, MixCardData } from '../data/Data';
+import ListMusic from '../../components/listMusic';
+import { cardData, showCardData, MixCardData } from '../../data/Data';
+
+
 const MusicPlayerScreen = ({ navigation }) => {
     useEffect(() => {
         navigation.setOptions({
@@ -26,7 +28,7 @@ const MusicPlayerScreen = ({ navigation }) => {
                             </Text>
                         </View>
                         <View style={styles.imgDisk}>
-                            <Image style={{ height: 330, width: 330, borderRadius: 330 / 2 }} resizeMode={"cover"} source={require("../assets/img/songs/1.webp")} />
+                            <Image style={{ height: 330, width: 330, borderRadius: 330 / 2 }} resizeMode={"cover"} source={require("../../assets/img/songs/1.webp")} />
                         </View>
                         <View style={styles.iconCont}>
                             <IconButton style={styles.icon}
@@ -66,7 +68,7 @@ const MusicPlayerScreen = ({ navigation }) => {
                     <View style={styles.songCont}>
                         <View style={styles.songBorder}>
                             <View style={styles.ImageSongCont}>
-                                <Image style={{ height: 80, width: 80, borderRadius: 120 / 2 }} source={require("../assets/img/songs/13.webp")} />
+                                <Image style={{ height: 80, width: 80, borderRadius: 120 / 2 }} source={require("../../assets/img/songs/13.webp")} />
                             </View>
                             <View style={styles.textSongCont}>
                                 <Text style={styles.songText} numberOfLines={1}>{route.params.name}</Text>

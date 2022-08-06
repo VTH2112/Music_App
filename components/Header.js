@@ -3,6 +3,7 @@ import React from 'react';
 import { IconButton, MD3Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+
 const Header = () => {
     const navigation = useNavigation();
     return (

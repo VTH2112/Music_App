@@ -1,6 +1,6 @@
 
 
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
@@ -10,9 +10,7 @@ import LinearGradient from 'react-native-linear-gradient'
 import TrendingCard from '../components/TrendingCard';
 import { cardData, showCardData, MixCardData } from '../data/Data';
 import MixCard from '../components/MixCard';
-import Icon from 'react-native-vector-icons/FontAwesome5';
-import { useNavigation } from '@react-navigation/native';
-import MusicPlayerScreen from '../screens/MusicPlayer';
+
 
 
 

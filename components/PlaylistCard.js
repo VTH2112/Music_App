@@ -3,7 +3,7 @@ import React from 'react';
 import LibraryScreen from '../screens/LibraryScreen';
 import { useNavigation } from '@react-navigation/native';
 import { cardData, showCardData, MixCardData } from '../data/Data';
-import MusicPlayerScreen from '../screens/MusicPlayer';
+import MusicPlayerScreen from '../screens/musicPlayerHomeScreen/MusicPlayer';
 const PlaylistCard = ({ img, name, duration, singer }) => {
     console.log(img);
     const nav = useNavigation();

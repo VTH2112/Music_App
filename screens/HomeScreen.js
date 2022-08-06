@@ -3,15 +3,14 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
 import Header from '../components/Header';
 import PlaylistCard from '../components/PlaylistCard';
 import ShowCard from '../components/ShowCard';
 import LinearGradient from 'react-native-linear-gradient'
 import TrendingCard from '../components/TrendingCard';
-import { cardData, showCardData,MixCardData } from '../data/Data';
+import { cardData, showCardData, MixCardData } from '../data/Data';
 import MixCard from '../components/MixCard';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+
 
 
 
@@ -19,13 +18,12 @@ console.log(cardData);
 console.log(cardData.map(dat => dat.img));
 
 const HomeScreen = ({ navigation }) => {
-    
+
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
         });
     }, [])
-
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
@@ -33,14 +31,16 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.subContainer}>
                         <Header />
                         <View style={styles.cardContainer}>
-                            {cardData.map(dat => <PlaylistCard key={dat.name} name={dat.name} img={dat.img} />)}
+                            {cardData.map(dat =>
+                                <PlaylistCard key={dat.name} name={dat.name} img={dat.img} duration={dat.duration} singer={dat.singer} />
+                            )}
                         </View>
                         <View style={styles.showContainer}>
                             <Text style={styles.text}>Show to try</Text>
                             <ScrollView horizontal={true}>
                                 {
                                     showCardData.map(dat =>
-                                        <ShowCard key={dat.name} name={dat.name} artists={dat.singer} img={dat.img} />
+                                        <ShowCard key={dat.name} name={dat.name} singer={dat.singer} img={dat.img} duration={dat.duration} />
                                     )}
                             </ScrollView>
 
@@ -53,9 +53,7 @@ const HomeScreen = ({ navigation }) => {
                                         <MixCard key={dat.name} name={dat.name} artists={dat.singer} img={dat.img} />
                                     )}
                             </ScrollView>
-
                         </View>
-
                     </View>
                 </ScrollView>
             </LinearGradient>

@@ -1,11 +1,11 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
-import HeaderHistory from '../components/HeaderHistory';
+import HeaderSetting from '../../components/HeaderSetting';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient'
 
 
-const HistoryScreen = ({ navigation }) => {
+const SettingScreen = ({ navigation }) => {
 
     useEffect(() => {
         navigation.setOptions({
@@ -17,10 +17,9 @@ const HistoryScreen = ({ navigation }) => {
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
                 <ScrollView>
-                    <HeaderHistory />
+                    <HeaderSetting />
                 </ScrollView>
             </LinearGradient>
-
         </SafeAreaView>
     )
 
@@ -61,5 +60,5 @@ const styles = StyleSheet.create({
     }
 })
 
-export default HistoryScreen;
+export default SettingScreen;
 

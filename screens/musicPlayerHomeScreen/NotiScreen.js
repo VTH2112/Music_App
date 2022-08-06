@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import React, { useEffect } from 'react';
-import HeaderCard from '../components/HeaderCard';
+import HeaderCard from '../../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient'
 

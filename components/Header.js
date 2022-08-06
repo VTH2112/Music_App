@@ -12,16 +12,14 @@ const Header = () => {
                 <Text style={styles.text}>To get you started</Text>
             </View>
             <View style={styles.iconCont}>
-
                 <IconButton style={styles.icon}
                     icon="bell-outline"
                     color="white"
                     size={30}
                     onPress={() => {
-                        navigation.navigate('MusicPlayer')
+                        navigation.navigate('NotiScreen')
                     }}
                 />
-
                 <IconButton style={styles.icon}
                     icon="history"
                     color="white"
@@ -35,11 +33,9 @@ const Header = () => {
                     onPress={() => { navigation.navigate('SettingScreen') }}
                 />
             </View>
-
         </View>
     )
 }
-
 const styles = StyleSheet.create({
     topCont: {
         flexDirection: 'row',

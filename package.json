@@ -10,11 +10,15 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.17.7",
     "@react-navigation/bottom-tabs": "^6.3.2",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "axios": "^0.27.2",
     "react": "18.0.0",
     "react-native": "0.69.3",
+    "react-native-async-storage": "^0.0.1",
+    "react-native-keyboard-aware-scrollview": "^2.1.0",
     "react-native-linear-gradient": "^2.6.2",
     "react-native-paper": "^4.12.4",
     "react-native-reanimated": "^2.9.1",

@@ -1,4 +1,5 @@
 {
   "name": "MusicApp",
-  "displayName": "MusicApp"
+  "displayName": "MusicApp",
+  "softwareKeyboardLayoutMode": "pan"
 }

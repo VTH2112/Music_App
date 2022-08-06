@@ -13,16 +13,15 @@ const signIn = async(usename, password) => {
     console.log(user.username)
     return {user: user, token: generateJwt(user.username)};
 };
-const signUp = async (usename, password, per) => {
+const signUp = async (usename, passwrord, email) => {
     //1. Validation
     //2. check username existed
-    const user = await userModel.findUserByUserName(usename)
-    if (user) {
+    const ur = await userModel.findUserByUserName(usename)
+    if (ur) {
         throw new Error("USER_EXISTED");
     }
-    const hasdedpassword =  await hashPassword(password);
-
-    await userModel.insertUser(usename, hasdedpassword, per);
+    const hasdedpassword =  await hashPassword(passwrord);
+    await userModel.insertUser(usename, hasdedpassword, email);
 
 
 };
@@ -36,7 +35,7 @@ const hashPassword = async (passowrd) => {
 const checkPassword = async(user, password)=>{
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch){
-        throw new Error("password is wrong");
+        throw new Error("AUTH_DENIED");
     }
 }
 

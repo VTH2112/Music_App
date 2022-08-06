@@ -12,8 +12,8 @@ router.post("/signin", async (req, res, next) => {
     }
 })
 router.post("/signup", async (req, res) => {
-    const { username, password, per } = req.body;
-    await authCtrl.signUp(username, password, per);
+    const { username, password, email } = req.body;
+    await authCtrl.signUp(username, password, email);
     res.json({
         message: "sign up sucessfully"
     })

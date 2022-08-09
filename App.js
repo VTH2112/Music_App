@@ -57,6 +57,20 @@ const UserStack = ({ navigation }) => {
 
   )
 }
+const LibraryStack = ({ navigation }) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [])
+  return (
+    <Stack.Navigator initialRouteName='Library'>
+      <Stack.Screen name="LibraryStack" component={LibraryScreen} option={{ title: 'Library' }} />
+      <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} option={{ title: 'MusicPlayer' }} />
+    </Stack.Navigator>
+
+  )
+}
 export default function App() {
   return (
     <NavigationContainer >
@@ -93,7 +107,7 @@ export default function App() {
             )
           }}
         />
-        <Tab.Screen name="Library" component={LibraryScreen}
+        <Tab.Screen name="Library" component={LibraryStack}
 
           options={{
             tabBarIcon: ({ color, size }) => (

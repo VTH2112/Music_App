@@ -10,7 +10,7 @@ const PlaylistCard = ({ img, name, duration, singer }) => {
     return (
         <View style={styles.container}>
 
-            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer })} style={styles.container}>
+            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer })} style={styles.container1}>
                 <Image style={{ height: 60, width: 60 }} source={require("../assets/img/songs/13.webp")} />
                 <View style={styles.textCont} component={LibraryScreen}>
                     <Text style={styles.text}>{name}</Text>
@@ -35,6 +35,18 @@ const styles = StyleSheet.create({
         marginBottom: 9,
 
     },
+    container1: {
+        flex: 1,
+        minWidth: 170,
+        maxWidth: 210,
+        maxHeight: 60,
+        backgroundColor: "rgba(51,51,51,0.7)",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderRadius: 4,
+        overflow: 'hidden',
+    },
     textCont: {
         textAlign: "center",
         width: "55%",
@@ -42,6 +54,8 @@ const styles = StyleSheet.create({
     },
     text: {
         color: "white",
+        marginRight: 2,
+        marginLeft: -10,
     }
 })
 

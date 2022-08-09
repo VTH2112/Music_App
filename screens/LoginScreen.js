@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native'
 import { View, Text, Button, TextInput, Pressable, StyleSheet, Settings } from "react-native";
 import axiosIntance, { updateToken } from "../apis/axios";
@@ -9,16 +9,24 @@ import { color } from "react-native-reanimated";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const LoginScreen = () => {
+
+const LoginScreen = ({ navigation }) => {
+    useEffect(() => {
+        navigation.setOptions({
+            headerShown: false,
+        });
+    }, [])
     const [username, setUername] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [submit, setSubmit] = useState(false);
     const userCtx = useContext(AuthContext)
-    const navigation = useNavigation();
+    const nav = useNavigation();
     const gotoRegister = () => {
-        navigation.navigate("RegisterScreen");
+        nav.navigate("RegisterScreen");
+
     }
     const handbleSubmit = async () => {
         if (submit) {
@@ -35,10 +43,23 @@ const LoginScreen = () => {
 
     return (
         <KeyboardAwareScrollView style={styles.container}>
-            <View  >
+            <View style={styles.loginCont}>
+                <View style={styles.logo}>
+                    <MaterialCommunityIcons name="spotify" size={70} color={"#2ebd59"} />
+                    <Text style={styles.logoText}>Spotify</Text>
+                </View>
+                <View style={styles.blockHead}>
+                    <Pressable style={styles.btnSignIn}>
+                        <Text style={styles.text}>SIGN IN</Text>
+                    </Pressable>
+                    <Pressable onPress={gotoRegister} style={styles.btnSignUp}>
+                        <Text style={styles.text}>SIGN UP</Text>
+                    </Pressable>
+                </View>
                 <View style={styles.block}>
-                    <Text style={styles.title}>User Name</Text>
                     <TextInput
+                        placeholder="Username"
+                        placeholderTextColor="#b1b2b7"
                         value={username}
                         style={styles.input}
                         onChangeText={
@@ -50,8 +71,9 @@ const LoginScreen = () => {
 
                 </View>
                 <View style={styles.block}>
-                    <Text style={styles.title}>Password</Text>
                     <TextInput
+                        placeholder="Password"
+                        placeholderTextColor="#b1b2b7"
                         value={password}
                         style={styles.input}
                         password={true}
@@ -68,10 +90,10 @@ const LoginScreen = () => {
                     {message}
                 </Text>
                 <Pressable onPress={handbleSubmit} style={submit ? (styles.buttonEnable) : (styles.buttonDisable)}  >
-                    <Text style={submit ? (styles.textEnable) : (styles.textDisable)} >LOGIN</Text>
+                    <Text style={submit ? (styles.textEnable) : (styles.textDisable)} >SIGN IN</Text>
                 </Pressable>
-                <Pressable onPress={gotoRegister} style={styles.button}>
-                    <Text style={styles.text}>Go to Register</Text>
+                <Pressable style={styles.btnForgot}>
+                    <Text style={styles.textForgot}>Forgot Password ?</Text>
                 </Pressable>
             </View>
         </KeyboardAwareScrollView>
@@ -80,7 +102,24 @@ const LoginScreen = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'black'
+        backgroundColor: '#2e2f33'
+    },
+    logo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 100,
+    },
+    logoText: {
+        fontSize: 35,
+        color: "#ffffff",
+        marginLeft: 10,
+    },
+    loginCont: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
     },
     title: {
         fontSize: 20,
@@ -89,40 +128,51 @@ const styles = StyleSheet.create({
         fontSize: 30,
     },
     input: {
-        backgroundColor: 'gray',
-        borderRadius: 5,
-        color: 'white',
-        fontSize: 20
+        width: 335,
+        height: 50,
+        backgroundColor: '#ffffff',
+        borderRadius: 50,
+        color: 'black',
+        fontSize: 16,
+        paddingLeft: 30,
+        paddingBottom: 10,
+        paddingTop: 10
+    },
+    blockHead: {
+        flexDirection: 'row',
+        marginBottom: 40,
     },
     block: {
-        marginBottom: 50,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 0,
+        marginTop: 25,
     },
     buttonEnable: {
-        width: 200,
-        height: 50,
-        borderRadius: 20,
-        backgroundColor: 'white',
+        width: 335,
+        height: 55,
+        borderRadius: 50,
+        backgroundColor: '#2ebd59',
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        marginTop: 30,
     },
     buttonDisable: {
-        width: 200,
-        height: 50,
-        borderRadius: 20,
+        width: 335,
+        height: 55,
+        borderRadius: 50,
         backgroundColor: '#a9a9a9',
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft: 'auto',
-        marginRight: 'auto',
+        marginTop: 30,
     },
     textEnable: {
         fontWeight: 'bold',
         fontSize: 15,
-        color: 'black'
+        color: "white",
     },
     textDisable: {
         fontWeight: 'bold',
@@ -134,22 +184,36 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'white'
     },
-    button: {
-        width: 150,
-        height: 25,
-        borderRadius: 20,
-        borderColor: 'gray',
-        borderWidth: 2,
-        backgroundColor: 'black',
+    textForgot: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        color: '#969799',
+    },
+    btnSignIn: {
+        width: 80,
+        height: 40,
+        borderColor: '#2ebd59',
+        borderBottomWidth: 3,
+        backgroundColor: '#2e2f33',
         alignItems: 'center',
         justifyContent: 'center',
         fontWeight: 'bold',
-        marginLeft: 'auto',
-        marginRight: 'auto',
         marginTop: 50
     },
-
-
-
+    btnSignUp: {
+        width: 80,
+        height: 40,
+        // borderColor: '#2ebd59',
+        // borderBottomWidth: 3,
+        backgroundColor: '#2e2f33',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontWeight: 'bold',
+        marginLeft: 25,
+        marginTop: 50
+    },
+    btnForgot: {
+        marginTop: 55,
+    },
 })
 export default LoginScreen;

@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
         marginTop: 0,
         fontSize: 11,
     },
+    
 })
 
 export default ListMusic;

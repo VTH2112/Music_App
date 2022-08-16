@@ -10,41 +10,75 @@ import { cardData, showCardData, MixCardData } from '../../data/Data';
 import TrackPlayer, {Capability, Event, RepeatMode,State, useProgress,useTrackPlayerEvents, usePlaybackState} from 'react-native-track-player';
 //  import songs from '../../assets/data'
  import Slider from '@react-native-community/slider';
-const song =    [{
-    title: "Anh Đã Lạc Vào",
-    artist: 'Green, Đại Mèo Remix',
-    artwork: require("../../assets/img/songs/0.webp"),
-    url: require("../../assets/music/list-song/0.mp3"),
-    id: 1,
-    duration: 331 
+ import axiosIntance, { updateToken } from "../../apis/axios";
+import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+// const song =    [{
+//     title: "Anh Đã Lạc Vào",
+//     artist: 'Green, Đại Mèo Remix',
+//     artwork: require("../../assets/img/songs/0.webp"),
+//     url: require("../../assets/music/list-song/0.mp3"),
+//     id: 1,
+//     duration: 331 
     
-},
-{
-    title: "Chạy Về Khóc Với Anh",
-    artist: 'Green, Đại Mèo Remix',
-    artwork: require("../../assets/img/songs/0.webp"),
-    url: require("../../assets/music/list-song/1.mp3"),
-    id: 2,
-    duration: 331 ,
+// },
+// {
+//     title: "Chạy Về Khóc Với Anh",
+//     artist: 'Green, Đại Mèo Remix',
+//     artwork: require("../../assets/img/songs/0.webp"),
+//     url: require("../../assets/music/list-song/1.mp3"),
+//     id: 2,
+//     duration: 331 ,
     
-},
-{
-    title: 'Sẵn Sàng Yêu Em Đi Thôi',
-    artist: 'Woni, Minh Tú, Đại Mèo Remix',
-    artwork: require("../../assets/img/songs/0.webp"),
-    url: require("../../assets/music/list-song/2.mp3"),
-    id: 3,
-    duration: 331 ,
+// },
+// {
+//     title: 'Sẵn Sàng Yêu Em Đi Thôi',
+//     artist: 'Woni, Minh Tú, Đại Mèo Remix',
+//     artwork: require("../../assets/img/songs/0.webp"),
+//     url: require("../../assets/music/list-song/2.mp3"),
+//     id: 3,
+//     duration: 331 ,
     
+// }
+// ]
+const serverUrl = 'http://192.168.0.120:3000/static/';
+let song_ = []
+let song = []
+const getSong = async() =>{
+    console.log('getsong 1');
+    const res = await axiosIntance.get("/playlist/62fbcb17e8588f32cbea05b7",{
+        // params:{
+        //     id: "62fbcb17e8588f32cbea05b7"
+        // }
+    }).catch(error => setMessage("CANNOT GET"));
+    console.log(res.data[0]);
+    song_ = res.data[0].songList;
 }
-]
  const setupPlayer = async() => {
+    await getSong()
+    console.log(song_);
+    song_.map(item =>{
+        song.push({
+            title: item.title, 
+            id: item.id,
+            artist: item.artist,
+            url: serverUrl+item.url,
+            artwork: serverUrl+item.artwork,
+            duration: item.duration})
+    })
     console.log(song);
-    await TrackPlayer.setupPlayer();
-    await TrackPlayer.add(song);
-    await TrackPlayer.play();
-    await setTitle(song[0].title)
-    console.log(song[0].title);
+    try {
+        await TrackPlayer.setupPlayer();
+        await TrackPlayer.add(song);
+        await TrackPlayer.play();
+        await setTitle(song[0].title)
+        console.log(song[0].title);
+        return true;
+    } catch (error) {
+        console.log(error);
+    }
+
+
+
 }
 const togglePlayBack = async(playbackState) =>{
     const currentTrack = await TrackPlayer.getCurrentTrack();
@@ -66,8 +100,12 @@ const MusicPlayerScreen = ({ navigation }) => {
         navigation.setOptions({
             headerShown: false,
         });
-        setupPlayer();
-        setTitle(song[0].title)
+        setupPlayer().then((result) => {
+            setTitle(song[0].title)
+        }).catch((err) => {
+            console(err)
+        });
+        //setTitle(song[0].title)
         //TrackPlayer.play();
         // scrollX.addListener(({value}) =>{
         //     const index = Math.round(value/width);
@@ -79,10 +117,8 @@ const MusicPlayerScreen = ({ navigation }) => {
     const route = useRoute();
     const playbackState = usePlaybackState();
     const progress = useProgress();
-    //const [songIndex, setSongIndex] = useState(0);
-    // const [songindex, dispatch] = useReducer(countReducer, 0)
-    const [songindex, setSongindex] = useState(0)
     const [title, setTitle] = useState("")
+    const [songindex, setSongindex] = useState(0)
 
     const Next = async() => {
         await TrackPlayer.skipToNext();

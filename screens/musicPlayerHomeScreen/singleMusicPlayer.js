@@ -12,7 +12,8 @@ import TrackPlayer, { Capability, Event, RepeatMode, State, useProgress, useTrac
 import Slider from '@react-native-community/slider';
 import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-
+import { useCallback } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 // const song =    [{
 //     title: "Anh Đã Lạc Vào",
 //     artist: 'Green, Đại Mèo Remix',
@@ -41,41 +42,50 @@ import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 
 // }
 // ]
-const serverUrl = 'http://192.168.1.5:3000/static/';
+//const serverUrl = 'http://192.168.1.5:3000/static/';
+const serverUrl = 'http://192.168.0.120:3000/static/';
 let song_ = []
 let song = []
-const getSong = async () => {
-    // const route = useRoute();
-    // const {itemId , id} = route.params.id;
-    console.log('getsong 1');
-    const res = await axiosIntance.get("/song", {
-        // params:{
-        //     id: "62fbcb17e8588f32cbea05b7"
-        // }
-    }).catch(error => setMessage("CANNOT GET"));
-    console.log(res.data);
-    song_ = res.data;
-}
-const setupSinglePlayer = async () => {
-
-    await getSong()
-    console.log(song_);
-    song_.map(item => {
-        song.push({
-            title: item.title,
-            id: item.id,
-            artist: item.artist,
-            url: serverUrl + item.url,
-            artwork: serverUrl + item.artwork,
-            duration: item.duration
-        })
-    })
-
-    console.log(song);
+const setUpSong = async (params) => {
     try {
+        song_ = [{
+            title: params.title, 
+            id: params.id,
+            artist: params.artist,
+            url: params.url,
+            artwork: params.artwork,
+            duration: params.duration
+            }]
+        console.log(song_);
+         let idAudio  = null
+        // console.log(AsyncStorage.getItem("idAudio"));
+        // console.log('id: =' + params.id);
+        AsyncStorage.getItem("idAudio").then((value) => {
+            idAudio = value;
+            console.log("idAudio: " + idAudio)
+            console.log("params.id: " + params.id)
+            if (idAudio!==null && idAudio!== params.id) {
+                console.log('DETROY');
+                TrackPlayer.reset();
+                AsyncStorage.setItem("idAudio", params.id);
+                TrackPlayer.setupPlayer();
+                TrackPlayer.add(song_);
+                TrackPlayer.play();
+            }
+
+        });
+        // if (idAudio!=null && idAudio!== params.id) {
+        //     console.log('DETROY');
+        //     await TrackPlayer.destroy()
+        //     await AsyncStorage.setItem("idAudio", params.id)   
+        // }else{
+        //     AsyncStorage.setItem("idAudio", params.id)   
+        // }
         await TrackPlayer.setupPlayer();
-        await TrackPlayer.add(song[0]);
+        await TrackPlayer.add(song_);
         await TrackPlayer.play();
+
+
         // await setTitle(song[0].title)
         // await setArtist(song[0].artwork)
         console.log(song[0].title);
@@ -84,6 +94,7 @@ const setupSinglePlayer = async () => {
         console.log(error);
     }
 }
+
 const togglePlayBack = async playBackState => {
     const currentTrack = await TrackPlayer.getCurrentTrack();
     console.log(currentTrack, playBackState, State.Playing);
@@ -97,53 +108,17 @@ const togglePlayBack = async playBackState => {
 };
 
 
-const SingleMusicPlayerScreen = ({ navigation , routeId }) => {
-
+const SingleMusicPlayerScreen = ({ navigation}) => {
+    const route = useRoute()
+    //console.log( route.params)
     useEffect(() => {
-        setupSinglePlayer().then((result) => {
-            setTitle(song[0].title)
-        }).catch((err) => {
-            console(err)
-        });
+        setUpSong(route.params);
         navigation.setOptions({
             headerShown: false,
         });
-        //setTitle(song[0].title)
-        //TrackPlayer.play();
-        // scrollX.addListener(({value}) =>{
-        //     const index = Math.round(value/width);
-        //     skipto(index);
-        //     setSongIndex(index)
-        // })
     }, [])
-    const route = useRoute();
     const playbackState = usePlaybackState();
     const progress = useProgress();
-    // const [title, setTitle] = useState("")
-    // const [artwork, setArtwork] = useState("")
-    // const [songindex, setSongindex] = useState(0)
-
-    // const Next = async () => {
-    //     await TrackPlayer.skipToNext();
-    //     let newIndex = 0;
-    //     newIndex = songindex === song.length ? song.length : songindex + 1;
-    //     await setSongindex(newIndex)
-    //     await setTitle(song[newIndex].title)
-    //     await setArtwork(song[newIndex].artwork)
-    // }
-    // const Pre = async () => {
-    //     await TrackPlayer.skipToPrevious()
-    //     let newIndex = 0;
-    //     newIndex = songindex === 0 ? 0 : songindex - 1;
-    //     await setSongindex(newIndex)
-    //     await setTitle(song[newIndex].title)
-    //     await setArtwork(song[newIndex].artwork)
-    //     // await setSongindex(newIndex)
-    //     // await console.log(song.at(2))
-    //     // setTitle(song[newIndex].title)
-    //     // await console.log(song[newIndex].title)
-    // }
-
 
     return (
         <SafeAreaView style={styles.container}>

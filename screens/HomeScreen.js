@@ -16,18 +16,21 @@ import MixCard from '../components/MixCard';
 
 console.log(cardData);
 console.log(cardData.map(dat => dat.img));
-const serverUrl = 'http://192.168.1.5:3000/static/';
+//const serverUrl = 'http://192.168.1.5:3000/static/';
+const serverUrl = 'http://192.168.0.120:3000/static/';
 const HomeScreen = ({ navigation }) => {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
-        fetch('http://192.168.1.5:3000/song')
+        //fetch('http://192.168.1.5:3000/song')
+        fetch('http://192.168.0.120:3000/song')
             .then(res => {
                 return res.json()
             })
             .then(resJson => {
                 setData(resJson)
+                console.log(resJson)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -45,7 +48,12 @@ const HomeScreen = ({ navigation }) => {
     }
     const showCard = ({ item }) => {
         return (
-            <ShowCard key={item.title} name={item.title} singer={item.artist} img={serverUrl + item.artwork} id={item.id} />
+            <ShowCard   key={item.title} 
+                        name={item.title}
+                        singer={item.artist} 
+                        artist={item.artist}  
+                        img={serverUrl + item.artwork} 
+                        id={item._id} url={serverUrl+item.url} />
         )
     }
 
@@ -56,9 +64,9 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.subContainer}>
                         <Header />
                         <View style={styles.cardContainer}>
-                            {cardData.map(dat =>
+                            {/* {cardData.map(dat =>
                                 <PlaylistCard key={dat.name} name={dat.name} img={dat.img} duration={dat.duration} singer={dat.singer} />
-                            )}
+                            )} */}
                         </View>
                         <View style={styles.showContainer}>
                             <Text style={styles.text}>Show to try</Text>
@@ -73,7 +81,7 @@ const HomeScreen = ({ navigation }) => {
                             />
 
                         </View>
-                        <View style={styles.bestContainer}>
+                        {/* <View style={styles.bestContainer}>
                             <Text style={styles.text}>Top Mixes</Text>
                             <FlatList
                                 style={styles.FlatList}
@@ -84,7 +92,7 @@ const HomeScreen = ({ navigation }) => {
                                 renderItem={mixCard}
 
                             />
-                        </View>
+                        </View> */}
                     </View>
                 </ScrollView>
             </LinearGradient>

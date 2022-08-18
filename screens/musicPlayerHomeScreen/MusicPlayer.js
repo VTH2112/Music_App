@@ -12,6 +12,7 @@ import TrackPlayer, {Capability, Event, RepeatMode,State, useProgress,useTrackPl
  import Slider from '@react-native-community/slider';
  import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+import serverUrl from '../../apis/Serverurl';
 // const song =    [{
 //     title: "Anh Đã Lạc Vào",
 //     artist: 'Green, Đại Mèo Remix',
@@ -40,7 +41,8 @@ import { Item } from 'react-native-paper/lib/typescript/components/List/List';
     
 // }
 // ]
-const serverUrl = 'http://192.168.0.120:3000/static/';
+//const serverUrl = 'http://192.168.0.120:3000/static/';
+//const serverUrl = 'http://192.168.0.120:3000/static/';
 let song_ = []
 let song = []
 const getSong = async() =>{

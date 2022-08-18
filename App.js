@@ -18,6 +18,7 @@ import SettingScreen from './screens/musicPlayerHomeScreen/SettingScreen';
 import userScreen from './screens/UserScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
+import SingleMusicPlayerScreen from './screens/musicPlayerHomeScreen/singleMusicPlayer';
 
 
 const Tab = createBottomTabNavigator()
@@ -33,6 +34,7 @@ const HomeStack = ({ navigation }) => {
     <Stack.Navigator initialRouteName='Home'>
       <Stack.Screen name="HomeStack" component={HomeScreen} option={{ title: 'Home' }} />
       <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} option={{ title: 'MusicPlayer' }} />
+      <Stack.Screen name="SingleMusicPlayer" component={SingleMusicPlayerScreen} option={{ title: 'SingleMusicPlayer' }} />
       <Stack.Screen name="NotiScreen" component={NotiScreen} option={{ title: 'NotiScreen' }} />
       <Stack.Screen name="HistoryScreen" component={HistoryScreen} option={{ title: 'HistoryScreen' }} />
       <Stack.Screen name="SettingScreen" component={SettingScreen} option={{ title: 'SettingScreen' }} />

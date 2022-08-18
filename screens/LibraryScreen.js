@@ -1,23 +1,39 @@
-import { StyleSheet, Text, View, ScrollView, Button, Image } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Image, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import { cardData, showCardData, MixCardData } from '../data/Data';
 import LibraryCard from '../components/LibraryCard';
-
+const serverUrl = 'http://192.168.1.5:3000/static/';
 
 const LibraryScreen = ({ navigation }) => {
-
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
+        fetch('http://192.168.1.5:3000/song')
+            .then(res => {
+                return res.json()
+            })
+            .then(resJson => {
+                setData(resJson)
+            }).finally(() => {
+                setIsLoading(false)
+            })
         navigation.setOptions({
             headerShown: false,
         });
     }, [])
+    const libraryCard = ({ item }) => {
+        console.log(item.title);
+        return (
+            <LibraryCard key={item.title} title={item.title} artists={item.artist} img={serverUrl + item.artwork} />
+        )
+
+    }
     const [text, onChangeText] = React.useState("");
     return (
-        <ScrollView style={styles.container}>
             <SafeAreaView style={styles.container}>
                 <View style={styles.headerFixed}>
                     <Text style={styles.textHead}>Music</Text>
@@ -58,23 +74,16 @@ const LibraryScreen = ({ navigation }) => {
                             <Text style={styles.text}>Create Playlist</Text>
                         </View>
                     </View>
-                    {showCardData.map(dat =>
-                        <LibraryCard key={dat.name} name={dat.name} img={dat.img} singer={dat.singer} />
-                    )}
+                    <FlatList
+                        style={styles.FlatList}
+                        showsHorizontalScrollIndicator={false}
+                        data={data}
+                        renderItem={libraryCard}
+
+                    />
                 </View>
 
             </SafeAreaView>
-            {/* <View style={styles.contentCont}>
-                <View style={styles.content}>
-                    <Evillcons name="search" size={150} color={"#fafafa"} />
-                    <Text style={styles.textHead}>Search Spotify</Text>
-                    <Text style={styles.text}>Find your favorite songs, artists, albums,
-                        podcasts, playlists, and friends
-                    </Text>
-                </View>
-
-            </View> */}
-        </ScrollView>
 
     )
 }
@@ -112,7 +121,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 3,
         borderBottomColor: '#89c96c',
     },
-     cardContainer: {
+    cardContainer: {
         flexDirection: 'column',
         marginTop: 20,
         marginLeft: 20,
@@ -122,8 +131,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         marginBottom: 20,
 
-    }, 
-      cardIcon: {
+    },
+    cardIcon: {
         width: 100,
         height: 100,
         backgroundColor: '#2c2c2c',
@@ -135,7 +144,10 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         marginLeft: 20,
     },
-
+    FlatList: {
+        marginBottom: 280,
+        
+    },
 })
 
 export default LibraryScreen;

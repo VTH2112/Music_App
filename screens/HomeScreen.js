@@ -1,7 +1,7 @@
 
 
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
-import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
 import PlaylistCard from '../components/PlaylistCard';
@@ -16,14 +16,39 @@ import MixCard from '../components/MixCard';
 
 console.log(cardData);
 console.log(cardData.map(dat => dat.img));
-
+const serverUrl = 'http://192.168.1.5:3000/static/';
 const HomeScreen = ({ navigation }) => {
 
+    const [data, setData] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
     useEffect(() => {
+        fetch('http://192.168.1.5:3000/song')
+            .then(res => {
+                return res.json()
+            })
+            .then(resJson => {
+                setData(resJson)
+            }).finally(() => {
+                setIsLoading(false)
+            })
         navigation.setOptions({
             headerShown: false,
         });
     }, [])
+    const mixCard = ({ item }) => {
+        console.log(item.artwork);
+        return (
+            <MixCard key={item.title} name={item.title} artists={item.artist} img={serverUrl + item.artwork}  />
+
+        )
+
+    }
+    const showCard = ({ item }) => {
+        return (
+            <ShowCard key={item.title} name={item.title} singer={item.artist} img={serverUrl + item.artwork} id={item.id} />
+        )
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
@@ -37,22 +62,28 @@ const HomeScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.showContainer}>
                             <Text style={styles.text}>Show to try</Text>
-                            <ScrollView horizontal={true}>
-                                {
-                                    showCardData.map(dat =>
-                                        <ShowCard key={dat.name} name={dat.name} singer={dat.singer} img={dat.img} duration={dat.duration} />
-                                    )}
-                            </ScrollView>
+                            <FlatList
+                                style={styles.FlatList}
+                                horizontal
+                                pagingEnabled={true}
+                                showsHorizontalScrollIndicator={false}
+                                data={data}
+                                renderItem={showCard}
+
+                            />
 
                         </View>
                         <View style={styles.bestContainer}>
                             <Text style={styles.text}>Top Mixes</Text>
-                            <ScrollView horizontal={true}>
-                                {
-                                    MixCardData.map(dat =>
-                                        <MixCard key={dat.name} name={dat.name} artists={dat.singer} img={dat.img} />
-                                    )}
-                            </ScrollView>
+                            <FlatList
+                                style={styles.FlatList}
+                                horizontal
+                                pagingEnabled={true}
+                                showsHorizontalScrollIndicator={false}
+                                data={data}
+                                renderItem={mixCard}
+
+                            />
                         </View>
                     </View>
                 </ScrollView>

@@ -4,7 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Evillcons from 'react-native-vector-icons/EvilIcons';
-const LibraryCard = ({ img, name, singer }) => {
+const LibraryCard = ({ img, title, artists, duration, id }) => {
     const nav = useNavigation();
     return (
         // <View style={styles.container}>
@@ -14,14 +14,14 @@ const LibraryCard = ({ img, name, singer }) => {
         //         <Text style={styles.subText} numberOfLines={1}>{artists}</Text>
         //     </Pressable>
         // </View>
-            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: name ,  singer: singer })} >
+            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: title ,  singer: artists ,img :img})} >
                 <View style={styles.card}>
                     <View style={styles.cardImg}>
-                        <Image style={{ height: 100, width: 100, }} source={require("../assets/img/songs/1.webp")} />
+                        <Image style={{ height: 100, width: 100, }} source={{uri:img}} />
                     </View>
                     <View style={styles.cardText}>
-                        <Text style={styles.text}>{name}</Text>
-                        <Text style={styles.subText}>{singer}</Text>
+                        <Text style={styles.text}>{title}</Text>
+                        <Text style={styles.subText}>{artists}</Text>
                     </View>
                 </View>
             </Pressable>

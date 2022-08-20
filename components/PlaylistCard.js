@@ -9,8 +9,7 @@ const PlaylistCard = ({ img, name, duration, singer }) => {
     const nav = useNavigation();
     return (
         <View style={styles.container}>
-
-            <Pressable onPress={() => nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer })} style={styles.container1}>
+            <Pressable onPress={() => nav.navigate("SingleMusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url })} style={styles.container1}>
                 <Image style={{ height: 60, width: 60 }} source={require("../assets/img/songs/13.webp")} />
                 <View style={styles.textCont} component={LibraryScreen}>
                     <Text style={styles.text}>{name}</Text>

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Button, Image } from 'react-native';
-import React, { useEffect } from 'react';
+import { StyleSheet, Text, View, ScrollView, Button, Image, TextInput, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
 import HeaderUser from '../components/headerUser';
 import SignInScreen from './LoginScreen';
 import SignUpScreen from './RegisterScreen';
@@ -11,6 +11,12 @@ import { useNavigation } from '@react-navigation/native';
 
 
 const UserScreen = ({ navigation }) => {
+    const [showUpload, setShowUpload] = useState(false);
+    const [Title, onChangeTitle] = React.useState("");
+    const [Artists, onChangeArtists] = React.useState("");
+    const [Artworks, onChangeArtworks] = React.useState("");
+    const [Url, onChangeUrl] = React.useState("");
+    const [Type, onChangeType] = React.useState("");
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -113,7 +119,7 @@ const UserScreen = ({ navigation }) => {
                                 </View>
                                 <Text style={styles.textList}>42</Text>
                             </View>
-                            <View style={styles.textListLast}>
+                            <Pressable onPress={() => { setShowUpload(true) }} style={styles.textListLast}>
                                 <View style={styles.leftList}>
                                     <MaterialCommunityIcons name="cloud-upload-outline" size={25} color="white" />
                                     <Text style={styles.textListHead}>
@@ -121,8 +127,66 @@ const UserScreen = ({ navigation }) => {
                                     </Text>
                                 </View>
                                 <Text style={styles.textList}>7</Text>
-                            </View>
+                            </Pressable>
                         </View>
+                        {
+                            showUpload ? (
+                                <View style={styles.uploadMusicCont}>
+                                    <Pressable onPress={() => { setShowUpload(false) }} style={styles.closeUpload}>
+                                        <MaterialCommunityIcons name="close" size={20} color="white" />
+                                    </Pressable>
+                                    <View style={styles.Avatar}>
+                                        <Image style={{ height: 160, width: 160, borderRadius: 160 / 2, }} source={require("../assets/img/songs/1.webp")} />
+                                    </View>
+                                    <View style={styles.block}>
+                                        <TextInput
+                                            placeholder="Title"
+                                            onChangeText={onChangeTitle}
+                                            placeholderTextColor="#b1b2b7"
+                                            value={Title}
+                                            style={styles.input}
+                                        />
+                                        <TextInput
+                                            placeholder="Artist"
+                                            onChangeText={onChangeArtists}
+                                            placeholderTextColor="#b1b2b7"
+                                            value={Artists}
+                                            style={styles.input}
+
+                                        />
+                                        <TextInput
+                                            placeholder="Artworks"
+                                            onChangeText={onChangeArtworks}
+                                            placeholderTextColor="#b1b2b7"
+                                            value={Artworks}
+                                            style={styles.input}
+                                        />
+                                        <TextInput
+                                            placeholder="Music Url"
+                                            placeholderTextColor="#b1b2b7"
+                                            onChangeText={onChangeUrl}
+                                            value={Url}
+                                            style={styles.input}
+                                        />
+                                        <TextInput
+                                            placeholder="Type"
+                                            onChangeText={onChangeType}
+                                            placeholderTextColor="#b1b2b7"
+                                            value={Type}
+                                            style={styles.input}
+                                        />
+                                    </View>
+                                    <View style={styles.btnSub} >
+                                        <Button
+                                            onPress={() => { nav.navigate('RegisterScreen') }}
+                                            title="Submit"
+                                            color="#8A2BE2"
+                                            style={styles.btnSub}
+                                        />
+                                    </View>
+                                </View>
+                            ) : null
+                        }
                     </View>
                 </ScrollView>
             </LinearGradient>
@@ -181,12 +245,12 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     textBottomBorder: {
-        marginBottom: 60,
+        marginBottom: 10,
     },
     textListLast: {
         borderBottomWidth: 3,
         borderBottomColor: "#8A2BE2",
-        marginBottom: 20,
+        marginBottom: 80,
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
@@ -197,6 +261,44 @@ const styles = StyleSheet.create({
         flex: 1,
         flexDirection: "row",
         alignItems: "center"
+    },
+    block: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    input: {
+        width: 335,
+        height: 50,
+        backgroundColor: '#ffffff',
+        borderRadius: 50,
+        color: 'black',
+        fontSize: 16,
+        paddingLeft: 30,
+        paddingBottom: 10,
+        paddingTop: 10,
+        marginTop: 10,
+        marginBottom: 10,
+    },
+    uploadMusicCont: {
+        flex: 1,
+        borderWidth: 1,
+        borderRadius: 10,
+        borderColor: '#8A2BE2',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: -60,
+        marginBottom: 70,
+        paddingTop: 20,
+    },
+    btnSub: {
+        borderColor: "#8A2BE2",
+        width: "100%",
+    },
+    closeUpload: {
+        marginTop: -20,
+        width: "100%",
     },
 })
 

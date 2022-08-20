@@ -12,13 +12,13 @@ import SearchScreen from './screens/SearchScreen';
 import LibraryScreen from './screens/LibraryScreen';
 import UserScreen from './screens/UserScreen';
 import MusicPlayerScreen from './screens/musicPlayerHomeScreen/MusicPlayer';
+import SingleMusicPlayerScreen from './screens/musicPlayerHomeScreen/singleMusicPlayer';
 import NotiScreen from './screens/musicPlayerHomeScreen/NotiScreen';
 import HistoryScreen from './screens/musicPlayerHomeScreen/HistoryScreen';
 import SettingScreen from './screens/musicPlayerHomeScreen/SettingScreen';
 import userScreen from './screens/UserScreen';
 import LoginScreen from './screens/LoginScreen';
 import RegisterScreen from './screens/RegisterScreen';
-import SingleMusicPlayerScreen from './screens/musicPlayerHomeScreen/singleMusicPlayer';
 
 
 const Tab = createBottomTabNavigator()
@@ -38,6 +38,20 @@ const HomeStack = ({ navigation }) => {
       <Stack.Screen name="NotiScreen" component={NotiScreen} option={{ title: 'NotiScreen' }} />
       <Stack.Screen name="HistoryScreen" component={HistoryScreen} option={{ title: 'HistoryScreen' }} />
       <Stack.Screen name="SettingScreen" component={SettingScreen} option={{ title: 'SettingScreen' }} />
+    </Stack.Navigator>
+
+  )
+}
+const SearchStack = ({ navigation }) => {
+  useEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [])
+  return (
+    <Stack.Navigator initialRouteName='Search'>
+      <Stack.Screen name="SearchStack" component={SearchScreen} option={{ title: 'Search' }} />
+      <Stack.Screen name="SingleMusicPlayer" component={SingleMusicPlayerScreen} option={{ title: 'SingleMusicPlayer' }} />
     </Stack.Navigator>
 
   )
@@ -68,7 +82,7 @@ const LibraryStack = ({ navigation }) => {
   return (
     <Stack.Navigator initialRouteName='Library'>
       <Stack.Screen name="LibraryStack" component={LibraryScreen} option={{ title: 'Library' }} />
-      <Stack.Screen name="MusicPlayer" component={MusicPlayerScreen} option={{ title: 'MusicPlayer' }} />
+      <Stack.Screen name="SingleMusicPlayer" component={SingleMusicPlayerScreen} option={{ title: 'SingleMusicPlayer' }} />
     </Stack.Navigator>
 
   )
@@ -102,7 +116,7 @@ export default function App() {
             },
           }}
         />
-        <Tab.Screen name="Search" component={SearchScreen}
+        <Tab.Screen name="Search" component={SearchStack}
           options={{
             tabBarIcon: ({ color, size }) => (
               <MaterialIcons name="search" size={30} color={color} />

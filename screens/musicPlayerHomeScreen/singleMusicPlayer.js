@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, Pressable, Animated, Easing } from 'react-native';
 import React, { useEffect, useState, useReducer } from 'react';
 import HeaderCard from '../../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -14,6 +14,7 @@ import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { useCallback } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { serverUrl1, server } from '../../apis/serverUrl';
 // const song =    [{
 //     title: "Anh Đã Lạc Vào",
 //     artist: 'Green, Đại Mèo Remix',
@@ -43,28 +44,28 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 // }
 // ]
 //const serverUrl = 'http://192.168.1.5:3000/static/';
-const serverUrl = 'http://192.168.0.120:3000/static/';
+const serverUrl = server;
 let song_ = []
 let song = []
 const setUpSong = async (params) => {
     try {
         song_ = [{
-            title: params.title, 
+            title: params.title,
             id: params.id,
             artist: params.artist,
             url: params.url,
             artwork: params.artwork,
             duration: params.duration
-            }]
+        }]
         console.log(song_);
-         let idAudio  = null
+        let idAudio = null
         // console.log(AsyncStorage.getItem("idAudio"));
         // console.log('id: =' + params.id);
         AsyncStorage.getItem("idAudio").then((value) => {
             idAudio = value;
             console.log("idAudio: " + idAudio)
             console.log("params.id: " + params.id)
-            if (idAudio!==null && idAudio!== params.id) {
+            if (idAudio !== params.id) {
                 console.log('DETROY');
                 TrackPlayer.reset();
                 AsyncStorage.setItem("idAudio", params.id);
@@ -88,7 +89,7 @@ const setUpSong = async (params) => {
 
         // await setTitle(song[0].title)
         // await setArtist(song[0].artwork)
-        console.log(song[0].title);
+        // console.log(song[0].title);
         return true;
     } catch (error) {
         console.log(error);
@@ -101,22 +102,38 @@ const togglePlayBack = async playBackState => {
     if (currentTrack != null) {
         if (playBackState == State.Paused) {
             await TrackPlayer.play();
+
         } else {
             await TrackPlayer.pause();
         }
     }
 };
-
-
-const SingleMusicPlayerScreen = ({ navigation}) => {
+const spinValue = new Animated.Value(0);
+const SingleMusicPlayerScreen = ({ navigation }) => {
+    const [isplay, setIsPlaying] = useState(false);
     const route = useRoute()
     //console.log( route.params)
+    const startImgSpin = () => {
+        spinValue.setValue(0)
+        Animated.timing(spinValue, {
+            toValue: 1,
+            duration: 15000,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start(() => {
+            startImgSpin()
+        })
+    }
     useEffect(() => {
         setUpSong(route.params);
         navigation.setOptions({
             headerShown: false,
         });
     }, [])
+    const spin = spinValue.interpolate({
+        inputRange: [0, 1],
+        outputRange: ['0deg', '360deg'],
+    });
     const playbackState = usePlaybackState();
     const progress = useProgress();
 
@@ -131,7 +148,16 @@ const SingleMusicPlayerScreen = ({ navigation}) => {
                             </Text>
                         </View>
                         <View style={styles.imgDisk}>
-                            <Image style={{ height: 330, width: 330, borderRadius: 330 / 2 }} resizeMode={"cover"} source={{ uri: route.params.img}} />
+                            {
+                                isplay ? (<Animated.Image
+                                    style={{ transform: [{ rotate: spin }], height: 330, width: 330, borderRadius: 330 / 2 }}
+                                    source={{ uri: route.params.img }}
+                                />) :
+                                    (<Animated.Image
+                                        style={{ height: 330, width: 330, borderRadius: 330 / 2 }}
+                                        source={{ uri: route.params.img }}
+                                    />)
+                            }
                         </View>
                         <Slider
                             style={styles.progressBar}
@@ -158,9 +184,7 @@ const SingleMusicPlayerScreen = ({ navigation}) => {
                                 icon="reload"
                                 color="white"
                                 size={35}
-                            // onPress={() => {
-                            //     navigation.navigate('#')
-                            // }}
+                            // onPress={}
                             />
                             <Pressable onPress={async () => Pre()} >
                                 <IconButton style={styles.icon}
@@ -170,12 +194,20 @@ const SingleMusicPlayerScreen = ({ navigation}) => {
                                 // onPress={() => { navigation.navigate('#') }}
                                 />
                             </Pressable>
-                            <Pressable onPress={() => togglePlayBack(playbackState)}>
+                            <Pressable onPress={() => {
+                                togglePlayBack(playbackState)
+                                if (playbackState == State.Playing) {
+                                    setIsPlaying(false)
+                                } else {
+                                    setIsPlaying(true)
+                                    startImgSpin()
+                                }
+                            }}>
                                 <IconButton style={styles.icon}
                                     icon={playbackState === State.Playing ? "pause" : "play"}
                                     color="white"
                                     size={35}
-                                //onPress={() => { navigation.navigate('#') }}
+                                // onPress={startImgSpin}
                                 />
                             </Pressable>
                             <Pressable onPress={async () => Next()} >
@@ -185,13 +217,14 @@ const SingleMusicPlayerScreen = ({ navigation}) => {
                                     size={35}
                                 // onPress={() => { navigation.navigate('#') }}
                                 />
-                            </Pressable>
-                            <IconButton style={styles.icon}
-                                icon="shuffle-variant"
-                                color="white"
-                                size={35}
-                                onPress={() => { navigation.navigate('#') }}
-                            />
+                            </Pressable >
+                            <Pressable>
+                                <IconButton style={styles.icon}
+                                    icon="shuffle-variant"
+                                    color="white"
+                                    size={35}
+                                />
+                            </Pressable >
                         </View>
                     </View>
                     <View style={styles.songCont}>
@@ -314,11 +347,12 @@ const styles = StyleSheet.create({
 
     },
     progressBar: {
+        borderRadius: 50,
         width: 350,
         height: 40,
         marginTop: 25,
         flexDirection: 'row',
-      },
+    },
 
 })
 

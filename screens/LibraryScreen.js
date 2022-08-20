@@ -6,7 +6,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import { cardData, showCardData, MixCardData } from '../data/Data';
 import LibraryCard from '../components/LibraryCard';
-const serverUrl = 'http://192.168.1.5:3000/static/';
+import { serverUrl1, server } from '../apis/Serverurl';
+
+const serverUrl = server;
 
 const LibraryScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
@@ -28,62 +30,67 @@ const LibraryScreen = ({ navigation }) => {
     const libraryCard = ({ item }) => {
         console.log(item.title);
         return (
-            <LibraryCard key={item.title} title={item.title} artists={item.artist} img={serverUrl + item.artwork} />
+            <LibraryCard key={item.title}
+                name={item.title}
+                singer={item.artist}
+                artist={item.artist}
+                img={serverUrl + item.artwork}
+                id={item._id} url={serverUrl + item.url} />
         )
 
     }
     const [text, onChangeText] = React.useState("");
     return (
-            <SafeAreaView style={styles.container}>
-                <View style={styles.headerFixed}>
-                    <Text style={styles.textHead}>Music</Text>
-                    <Text style={styles.textHead1}>Podcasts</Text>
-                </View>
-                <View style={styles.menuCont}>
-                    <View style={styles.btnActive} >
-                        <Button
-                            // onPress={() => { }}
-                            title="Playlists"
-                            color="#191919"
-                            style={styles.signUpBtn}
-                        />
-                    </View>
-                    <View style={styles.btn} >
-                        <Button
-                            // onPress={() => {  }}
-                            title="Artists"
-                            color="#191919"
-                            style={styles.signUpBtn}
-                        />
-                    </View>
-                    <View style={styles.btn} >
-                        <Button
-                            // onPress={() => {  }}
-                            title="Albums"
-                            color="#191919"
-                            style={styles.signUpBtn}
-                        />
-                    </View>
-                </View>
-                <View style={styles.cardContainer}>
-                    <View style={styles.cardCreate}>
-                        <View style={styles.cardIcon}>
-                            <MaterialCommunityIcons name="plus" size={50} color={"#fafafa"} />
-                        </View>
-                        <View style={styles.cardText}>
-                            <Text style={styles.text}>Create Playlist</Text>
-                        </View>
-                    </View>
-                    <FlatList
-                        style={styles.FlatList}
-                        showsHorizontalScrollIndicator={false}
-                        data={data}
-                        renderItem={libraryCard}
-
+        <SafeAreaView style={styles.container}>
+            <View style={styles.headerFixed}>
+                <Text style={styles.textHead}>Music</Text>
+                <Text style={styles.textHead1}>Podcasts</Text>
+            </View>
+            <View style={styles.menuCont}>
+                <View style={styles.btnActive} >
+                    <Button
+                        // onPress={() => { }}
+                        title="Playlists"
+                        color="#191919"
+                        style={styles.signUpBtn}
                     />
                 </View>
+                <View style={styles.btn} >
+                    <Button
+                        // onPress={() => {  }}
+                        title="Artists"
+                        color="#191919"
+                        style={styles.signUpBtn}
+                    />
+                </View>
+                <View style={styles.btn} >
+                    <Button
+                        // onPress={() => {  }}
+                        title="Albums"
+                        color="#191919"
+                        style={styles.signUpBtn}
+                    />
+                </View>
+            </View>
+            <View style={styles.cardContainer}>
+                <View style={styles.cardCreate}>
+                    <View style={styles.cardIcon}>
+                        <MaterialCommunityIcons name="plus" size={50} color={"#fafafa"} />
+                    </View>
+                    <View style={styles.cardText}>
+                        <Text style={styles.text}>Create Playlist</Text>
+                    </View>
+                </View>
+                <FlatList
+                    style={styles.FlatList}
+                    showsHorizontalScrollIndicator={false}
+                    data={data}
+                    renderItem={libraryCard}
 
-            </SafeAreaView>
+                />
+            </View>
+
+        </SafeAreaView>
 
     )
 }
@@ -146,9 +153,8 @@ const styles = StyleSheet.create({
     },
     FlatList: {
         marginBottom: 280,
-        
+
     },
 })
 
 export default LibraryScreen;
-

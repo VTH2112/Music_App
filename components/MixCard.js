@@ -2,14 +2,14 @@ import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
-const MixCard = ({ img, name, artists, singer, duration, id }) => {
+const MixCard = ({ img, name, artist, duration, singer, id, url }) => {
     const nav = useNavigation();
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => nav.navigate("SingleMusicPlayer", { name: name, singer: artists, img: img, duration: duration })} >
+            <Pressable onPress={() => nav.navigate("SingleMusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url })} >
                 <Image style={{ height: 160, width: 160, borderRadius: 20, }} source={{ uri: img }} />
                 <Text style={styles.text} numberOfLines={1}>{name}</Text>
-                <Text style={styles.subText} numberOfLines={1}>{artists}</Text>
+                <Text style={styles.subText} numberOfLines={1}>{singer}</Text>
             </Pressable>
         </View>
     )

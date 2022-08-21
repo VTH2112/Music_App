@@ -90,9 +90,10 @@ const RegisterScreen = ({ navigation }) => {
                             username: username,
                             password: password
                         })
-                        userCtx.setUser(resLogin.data.user.username);
-                        updateToken(resLogin.token);
-                        AsyncStorage.setItem('token', resLogin.token)
+                        await userCtx.setUser(resLogin.data.user.username);
+                        await updateToken(resLogin.token);
+                        console.log('resLogin.token: ' + resLogin.token)
+                        await AsyncStorage.setItem('token', resLogin.token)
                     } catch (error) {
                         console.log(error);
                         setMessage('CAN NOT REGISTER NOW');

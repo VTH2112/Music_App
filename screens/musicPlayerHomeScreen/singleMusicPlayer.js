@@ -113,8 +113,9 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
     const [isplay, setIsPlaying] = useState(false);
     const route = useRoute()
     //console.log( route.params)
+    const playbackState = usePlaybackState();
     const startImgSpin = () => {
-        spinValue.setValue(0)
+        
         Animated.timing(spinValue, {
             toValue: 1,
             duration: 15000,
@@ -125,6 +126,9 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
         })
     }
     useEffect(() => {
+        spinValue.setValue(0);
+        startImgSpin();
+        setIsPlaying(true);
         setUpSong(route.params);
         navigation.setOptions({
             headerShown: false,
@@ -134,7 +138,6 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
         inputRange: [0, 1],
         outputRange: ['0deg', '360deg'],
     });
-    const playbackState = usePlaybackState();
     const progress = useProgress();
 
     return (

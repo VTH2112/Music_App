@@ -33,11 +33,11 @@ const LoginScreen = ({ navigation }) => {
             const res = await axiosIntance.post('auth/signin', {
                 username: username,
                 password: password
-            }).catch(error => setMessage("USER NAME OR PASSWORD IS INCORRECT"))
-            console.log(res);
-            userCtx.setUser(res.data.user.username);
-            updateToken(res.token);
-            AsyncStorage.setItem('token', res.token)
+            }).catch(error => setMessage(error.message))
+            console.log(res.data.user.username);
+            await userCtx.setUser(res.data.user.username);
+            await updateToken(res.data.token);
+            await AsyncStorage.setItem('token', res.data.token)
         }
     };
 

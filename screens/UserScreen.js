@@ -23,6 +23,7 @@ const UserScreen = ({ navigation }) => {
         });
     }, [])
     const nav = useNavigation();
+    
     return (
 
 
@@ -119,7 +120,7 @@ const UserScreen = ({ navigation }) => {
                                 </View>
                                 <Text style={styles.textList}>42</Text>
                             </View>
-                            <Pressable onPress={() => { setShowUpload(true) }} style={styles.textListLast}>
+                            <Pressable onPress={() => { nav.navigate("UpSongScreen") }} style={styles.textListLast}>
                                 <View style={styles.leftList}>
                                     <MaterialCommunityIcons name="cloud-upload-outline" size={25} color="white" />
                                     <Text style={styles.textListHead}>

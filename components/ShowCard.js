@@ -8,7 +8,7 @@ const ShowCard = ({ img, name, artist, duration, singer, id, url }) => {
     return (
         <View style={styles.container}>
             <Pressable onPress={() => {
-                nav.navigate("SingleMusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url });
+                nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url });
             }}>
                 {/* <Pressable onPress={() => nav.navigate("SingleMusicPlayer")} > */}
                 <Image style={{ height: 160, width: 160, borderRadius: 20, }} source={{ uri: img }} />

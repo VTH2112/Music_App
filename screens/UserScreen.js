@@ -24,8 +24,6 @@ const UserScreen = ({ navigation }) => {
     }, [])
     const nav = useNavigation();
     return (
-
-
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#7B68EE', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
                 <ScrollView>

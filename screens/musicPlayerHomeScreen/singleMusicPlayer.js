@@ -102,7 +102,6 @@ const togglePlayBack = async playBackState => {
     if (currentTrack != null) {
         if (playBackState == State.Paused) {
             await TrackPlayer.play();
-
         } else {
             await TrackPlayer.pause();
         }
@@ -136,7 +135,6 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
     });
     const playbackState = usePlaybackState();
     const progress = useProgress();
-
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.1, y: 0.4 }} end={{ x: 1, y: 1 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
@@ -184,16 +182,8 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
                                 icon="reload"
                                 color="white"
                                 size={35}
-                            // onPress={}
+                            // onPress={async () => Reset()}
                             />
-                            <Pressable onPress={async () => Pre()} >
-                                <IconButton style={styles.icon}
-                                    icon="step-backward"
-                                    color="white"
-                                    size={35}
-                                // onPress={() => { navigation.navigate('#') }}
-                                />
-                            </Pressable>
                             <Pressable onPress={() => {
                                 togglePlayBack(playbackState)
                                 if (playbackState == State.Playing) {
@@ -210,14 +200,6 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
                                 // onPress={startImgSpin}
                                 />
                             </Pressable>
-                            <Pressable onPress={async () => Next()} >
-                                <IconButton style={styles.icon}
-                                    icon="step-forward"
-                                    color="white"
-                                    size={35}
-                                // onPress={() => { navigation.navigate('#') }}
-                                />
-                            </Pressable >
                             <Pressable>
                                 <IconButton style={styles.icon}
                                     icon="shuffle-variant"

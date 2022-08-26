@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, ActivityIndicator } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
@@ -20,15 +20,27 @@ const serverUrl = server;
 const HomeScreen = ({ navigation }) => {
 
     const [data, setData] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [dataSong, setDataSong] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     useEffect(() => {
-        fetch('http://192.168.1.5:3000/playlist/62fbca4ee8588f32cbea05b3')
+        // fetch('http://192.168.1.5:3000/playlist')
+        //     .then(res => {
+        //         return res.json()
+        //     })
+        //     .then(resJson => {
+        //         setData(resJson)
+        //         console.log(resJson)
+        //     }).finally(() => {
+        //         setIsLoading(false)
+        //     })
+
+        fetch('https://listen-music-ser.herokuapp.com/song')
             .then(res => {
                 return res.json()
             })
             .then(resJson => {
-                setData(resJson[0].songList)
-                console.log(resJson[0].songList)
+                setDataSong(resJson)
+                console.log(resJson)
             }).finally(() => {
                 setIsLoading(false)
             })
@@ -57,6 +69,16 @@ const HomeScreen = ({ navigation }) => {
                 id={item._id} url={serverUrl + item.url} />
         )
     }
+    const PlayListCard = ({ item }) => {
+        return (
+            <PlaylistCard key={item.title}
+                name={item.title}
+                singer={item.artist}
+                artist={item.artist}
+                img={serverUrl + item.artwork}
+                id={item._id} url={serverUrl + item.url} />
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -65,33 +87,44 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.subContainer}>
                         <Header />
                         <View style={styles.cardContainer}>
-                            {cardData.map(dat =>
-                                <PlaylistCard key={dat.name} name={dat.name} img={dat.img} duration={dat.duration} singer={dat.singer} />
-                            )}
+                            {isLoading ?
+                                <ActivityIndicator size="large" color="#90EE90" /> :
+                                <FlatList
+                                    style={styles.FlatList}
+                                    horizontal
+                                    pagingEnabled={true}
+                                    showsHorizontalScrollIndicator={true}
+                                    data={dataSong}
+                                    renderItem={PlayListCard}
+
+                                />}
                         </View>
                         <View style={styles.showContainer}>
                             <Text style={styles.text}>Show to try</Text>
-                            <FlatList
-                                style={styles.FlatList}
-                                horizontal
-                                pagingEnabled={true}
-                                showsHorizontalScrollIndicator={false}
-                                data={data}
-                                renderItem={showCard}
+                            {isLoading ?
+                                <ActivityIndicator size="large" color="#90EE90" /> :
+                                <FlatList
+                                    style={styles.FlatList}
+                                    horizontal
+                                    pagingEnabled={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    data={dataSong}
+                                    renderItem={showCard}
 
-                            />
-
+                                />}
                         </View>
                         <View style={styles.bestContainer}>
                             <Text style={styles.text}>Top Mixes</Text>
-                            <FlatList
-                                style={styles.FlatList}
-                                horizontal
-                                pagingEnabled={true}
-                                showsHorizontalScrollIndicator={false}
-                                data={data}
-                                renderItem={mixCard}
-                            />
+                            {isLoading ?
+                                <ActivityIndicator size="large" color="#90EE90" /> : <FlatList
+                                    style={styles.FlatList}
+                                    horizontal
+                                    pagingEnabled={true}
+                                    showsHorizontalScrollIndicator={false}
+                                    data={dataSong}
+                                    renderItem={mixCard}
+                                />}
+
                         </View>
                     </View>
                 </ScrollView>
@@ -103,6 +136,8 @@ const HomeScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        height: '100%',
+        backgroundColor: "black",
     },
     subContainer: {
         paddingRight: 15,
@@ -115,7 +150,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        maxHeight: 210,
+        maxHeight: 390,
     },
     text: {
         color: "white",

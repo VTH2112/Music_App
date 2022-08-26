@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { useNavigation } from '@react-navigation/native'
-import { View, Text, Button, TextInput, Pressable, StyleSheet, Settings, Alert } from "react-native";
+import { View, Text, Button, TextInput, Pressable, StyleSheet, Settings, Alert, TouchableOpacity } from "react-native";
 import axiosIntance, { updateToken } from "../apis/axios";
 import { AuthContext } from "../context/auth";
 import { response } from "express";
@@ -124,12 +124,12 @@ const RegisterScreen = ({ navigation }) => {
                     <Text style={styles.logoText}>Spotify</Text>
                 </View>
                 <View style={styles.blockHead}>
-                    <Pressable onPress={gotoRegister} style={styles.btnSignIn}>
+                    <TouchableOpacity onPress={gotoRegister} style={styles.btnSignIn}>
                         <Text style={styles.text}>SIGN IN</Text>
-                    </Pressable>
-                    <Pressable style={styles.btnSignUp}>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnSignUp}>
                         <Text style={styles.text}>SIGN UP</Text>
-                    </Pressable>
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.block}>
                     <TextInput

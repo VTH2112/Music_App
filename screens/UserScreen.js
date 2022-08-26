@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Button, Image, TextInput, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Image, TextInput, Pressable ,TouchableOpacity} from 'react-native';
 import React, { useEffect, useState } from 'react';
 import HeaderUser from '../components/headerUser';
 import SignInScreen from './LoginScreen';
@@ -25,8 +25,6 @@ const UserScreen = ({ navigation }) => {
     const nav = useNavigation();
     
     return (
-
-
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#7B68EE', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
                 <ScrollView>
@@ -120,7 +118,7 @@ const UserScreen = ({ navigation }) => {
                                 </View>
                                 <Text style={styles.textList}>42</Text>
                             </View>
-                            <Pressable onPress={() => { nav.navigate("UpSongScreen") }} style={styles.textListLast}>
+                            <Pressable onPress={() => { setShowUpload(true) }} style={styles.textListLast}>
                                 <View style={styles.leftList}>
                                     <MaterialCommunityIcons name="cloud-upload-outline" size={25} color="white" />
                                     <Text style={styles.textListHead}>
@@ -128,14 +126,14 @@ const UserScreen = ({ navigation }) => {
                                     </Text>
                                 </View>
                                 <Text style={styles.textList}>7</Text>
-                            </Pressable>
+                            </TouchableOpacity>
                         </View>
                         {
                             showUpload ? (
                                 <View style={styles.uploadMusicCont}>
-                                    <Pressable onPress={() => { setShowUpload(false) }} style={styles.closeUpload}>
+                                    <TouchableOpacity onPress={() => { setShowUpload(false) }} style={styles.closeUpload}>
                                         <MaterialCommunityIcons name="close" size={20} color="white" />
-                                    </Pressable>
+                                    </TouchableOpacity>
                                     <View style={styles.Avatar}>
                                         <Image style={{ height: 160, width: 160, borderRadius: 160 / 2, }} source={require("../assets/img/songs/1.webp")} />
                                     </View>

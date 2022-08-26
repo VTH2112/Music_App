@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, Pressable, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,7 +14,7 @@ const LibraryCard = ({ img, name, artist, duration, singer, id, url }) => {
         //         <Text style={styles.subText} numberOfLines={1}>{artists}</Text>
         //     </Pressable>
         // </View>
-        <Pressable onPress={() => nav.navigate("SingleMusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url })} >
+        <TouchableOpacity onPress={() => nav.navigate("SingleMusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url })} >
             <View style={styles.card}>
                 <View style={styles.cardImg}>
                     <Image style={{ height: 100, width: 100, }} source={{ uri: img }} />
@@ -24,7 +24,7 @@ const LibraryCard = ({ img, name, artist, duration, singer, id, url }) => {
                     <Text style={styles.subText}>{singer}</Text>
                 </View>
             </View>
-        </Pressable>
+        </TouchableOpacity>
 
     )
 }

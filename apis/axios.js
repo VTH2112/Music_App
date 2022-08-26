@@ -1,8 +1,8 @@
 import axios from "axios";
-import server from "./Serverurl";
+import serverUrl1 from "./Serverurl";
 const axiosIntance = axios.create({
-    //baseURL: "http://192.168.0.120:3000",
-    baseURL: server,
+    baseURL: "http://192.168.1.5:3000",
+    // baseURL: serverUrl1,
 });
 
 export const updateToken = jwt => {

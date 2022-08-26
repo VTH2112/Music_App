@@ -14,9 +14,7 @@ import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { useCallback } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { serverUrl1, server } from '../../apis/serverUrl';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-const serverUrl = server;
 let song_ = []
 let song = []
 const setUpSong = async (params) => {

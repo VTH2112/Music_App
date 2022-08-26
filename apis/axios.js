@@ -1,7 +1,7 @@
 import axios from "axios";
-import serverUrl1 from "./Serverurl";
+import {server} from "./Serverurl.js";
 const axiosIntance = axios.create({
-    baseURL: "http://192.168.1.5:3000",
+    baseURL: server,
     // baseURL: serverUrl1,
 });
 

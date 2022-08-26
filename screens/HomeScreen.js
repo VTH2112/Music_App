@@ -8,33 +8,20 @@ import LinearGradient from 'react-native-linear-gradient'
 import TrendingCard from '../components/TrendingCard';
 import { cardData, showCardData, MixCardData } from '../data/Data';
 import MixCard from '../components/MixCard';
-import { serverUrl1, server } from '../apis/Serverurl';
+import { serverURL, server } from '../apis/Serverurl';
 
 
-
-
-console.log(cardData);
-console.log(cardData.map(dat => dat.img));
-const serverUrl = server;
-// const serverUrl = server;
+// console.log(cardData);
+// console.log(cardData.map(dat => dat.img));
 const HomeScreen = ({ navigation }) => {
 
     const [data, setData] = useState([]);
     const [dataSong, setDataSong] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [dataPlaylist, setPlaylist] = useState([]);
     useEffect(() => {
-        // fetch('http://192.168.1.5:3000/playlist')
-        //     .then(res => {
-        //         return res.json()
-        //     })
-        //     .then(resJson => {
-        //         setData(resJson)
-        //         console.log(resJson)
-        //     }).finally(() => {
-        //         setIsLoading(false)
-        //     })
 
-        fetch('https://listen-music-ser.herokuapp.com/song')
+        fetch(server +"/song")
             .then(res => {
                 return res.json()
             })
@@ -47,6 +34,22 @@ const HomeScreen = ({ navigation }) => {
         navigation.setOptions({
             headerShown: false,
         });
+
+        fetch(server +"/playlist")
+            .then(res => {
+                return res.json()
+            })
+            .then(resJson => {
+                setPlaylist(resJson)
+                console.log("data playlist: ")
+                console.log(resJson)
+            }).finally(() => {
+                setIsLoading(false)
+            })
+        navigation.setOptions({
+            headerShown: false,
+        });
+
     }, [])
     const mixCard = ({ item }) => {
         console.log(item.artwork);
@@ -55,8 +58,8 @@ const HomeScreen = ({ navigation }) => {
                 name={item.title}
                 singer={item.artist}
                 artist={item.artist}
-                img={serverUrl + item.artwork}
-                id={item._id} url={serverUrl + item.url} />
+                img={serverURL + item.artwork}
+                id={item._id} url={serverURL + item.url} />
         )
     }
     const showCard = ({ item }) => {
@@ -65,18 +68,18 @@ const HomeScreen = ({ navigation }) => {
                 name={item.title}
                 singer={item.artist}
                 artist={item.artist}
-                img={serverUrl + item.artwork}
-                id={item._id} url={serverUrl + item.url} />
+                img={serverURL + item.artwork}
+                id={item._id} url={serverURL + item.url} />
         )
     }
     const PlayListCard = ({ item }) => {
         return (
-            <PlaylistCard key={item.title}
-                name={item.title}
-                singer={item.artist}
-                artist={item.artist}
-                img={serverUrl + item.artwork}
-                id={item._id} url={serverUrl + item.url} />
+            <PlaylistCard key={item._id}
+                name={item.name}
+                singer={item.owner}
+                artist={item.owner}
+                img={serverURL + item.img}
+                id={item._id} url={serverURL + item.url} />
         )
     }
 
@@ -94,7 +97,7 @@ const HomeScreen = ({ navigation }) => {
                                     horizontal
                                     pagingEnabled={true}
                                     showsHorizontalScrollIndicator={true}
-                                    data={dataSong}
+                                    data={dataPlaylist}
                                     renderItem={PlayListCard}
 
                                 />}

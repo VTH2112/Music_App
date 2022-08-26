@@ -126,7 +126,7 @@ const UserScreen = ({ navigation }) => {
                                     </Text>
                                 </View>
                                 <Text style={styles.textList}>7</Text>
-                            </TouchableOpacity>
+                            </Pressable>
                         </View>
                         {
                             showUpload ? (

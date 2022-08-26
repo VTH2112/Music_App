@@ -12,87 +12,81 @@ import TrackPlayer, { Capability, Event, RepeatMode, State, useProgress, useTrac
 import Slider from '@react-native-community/slider';
 import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
-import { server, serverUrl1 } from '../../apis/Serverurl';
-const serverUrl = server;
+import { server, serverURL } from '../../apis/Serverurl';
 let song_ = []
 let song = []
-const getSong = async () => {
-    console.log('getsong 1');
-    const res = await axiosIntance.get("/playlist/62fbcb17e8588f32cbea05b7", {
-        // params:{
-        //     id: "62fbcb17e8588f32cbea05b7"
-        // }
-    }).catch(error => setMessage("CANNOT GET"));
-    console.log(res.data[0]);
-    song_ = res.data[0].songList;
-}
-const setupPlayer = async () => {
-    await getSong()
-    console.log(song_);
-    song_.map(item => {
-        song.push({
-            title: item.title,
-            id: item.id,
-            artist: item.artist,
-            url: serverUrl + item.url,
-            artwork: serverUrl + item.artwork,
-            duration: item.duration
-        })
-    })
-
-
-    try {
-        await TrackPlayer.setupPlayer();
-        await TrackPlayer.add(song);
-        await TrackPlayer.play();
-        await setTitle(song[0].title)
-        await setArtist(song[0].artwork)
-        console.log(song[0].title);
-        return true;
-    } catch (error) {
-        console.log(error);
-    }
-}
-const togglePlayBack = async (playbackState) => {
-    const currentTrack = await TrackPlayer.getCurrentTrack();
-    console.log("playbackState: " + playbackState);
-    console.log("State.Paused: " + State.Paused);
-    if (currentTrack != null) {
-        if (playbackState === State.Paused) {
-            console.log("play");
-            await TrackPlayer.play();
-            console.log("played");
-        } else {
-            await TrackPlayer.pause();
-        }
-    }
-}
-
 const MusicPlayerScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    useEffect(() => {
-        fetch('https://listen-music-ser.herokuapp.com/song')
-            .then(res => {
-                return res.json()
-            })
-            .then(resJson => {
-                setData(resJson)
-                console.log(resJson)
-            }).finally(() => {
-                setIsLoading(false)
-            })
+    const route = useRoute();
 
-        navigation.setOptions({
-            headerShown: false,
+    const getSong = async (id) => {
+        const res = await axiosIntance.get("/playlist/"+id, {
+            // params:{
+            //     id: "62fbcb17e8588f32cbea05b7"
+            // }
+        }).then(
+            res => 
+            {
+                console.log("id: ");
+                console.log(id);
+                song_ = res.data[0].songList
+            }
+
+        ).catch(error => {
+            console.log(error)
         });
-        setupPlayer().then((result) => {
-            setTitle(song[0].title)
-        }).catch((err) => {
-            console(err)
-        });
+
+    }
+    const setupPlayer = async (id) => {
+        console.log("setupPlayer")
+        console.log(id)
+        await getSong(id)
+        console.log(song_);
+        song_.map(item => {
+            song.push({
+                title: item.title,
+                id: item.id,
+                artist: item.artist,
+                url: serverURL + item.url,
+                artwork: serverURL + item.artwork,
+                duration: item.duration
+            })
+        })
+    
+    
+        try {
+            await TrackPlayer.setupPlayer();
+            await TrackPlayer.add(song);
+            await TrackPlayer.play();
+            await setTitle(song[0].title)
+            await setArtist(song[0].artwork)
+            console.log(song[0].title);
+            return true;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    const togglePlayBack = async (playbackState) => {
+        const currentTrack = await TrackPlayer.getCurrentTrack();
+        console.log("playbackState: " + playbackState);
+        console.log("State.Paused: " + State.Paused);
+        if (currentTrack != null) {
+            if (playbackState === State.Paused) {
+                console.log("play");
+                await TrackPlayer.play();
+                console.log("played");
+            } else {
+                await TrackPlayer.pause();
+            }
+        }
+    }
+
+
+    useEffect(() => {
+        setupPlayer(route.params.id)
         //setTitle(song[0].title)
-        //TrackPlayer.play();
+        // TrackPlayer.play();
         // scrollX.addListener(({value}) =>{
         //     const index = Math.round(value/width);
         //     skipto(index);
@@ -105,12 +99,11 @@ const MusicPlayerScreen = ({ navigation }) => {
                 name={item.title}
                 singer={item.artist}
                 artist={item.artist}
-                img={serverUrl + item.artwork}
-                id={item._id} url={serverUrl + item.url} />
+                img={serverURL + item.artwork}
+                id={item._id} url={serverURL + item.url} />
         )
     }
 
-    const route = useRoute();
     const playbackState = usePlaybackState();
     const progress = useProgress();
     const [title, setTitle] = useState("")
@@ -132,25 +125,7 @@ const MusicPlayerScreen = ({ navigation }) => {
         await setSongindex(newIndex)
         await setTitle(song[newIndex].title)
         await setArtwork(song[newIndex].artwork)
-        // await setSongindex(newIndex)
-        // await console.log(song.at(2))
-        // setTitle(song[newIndex].title)
-        // await console.log(song[newIndex].title)
     }
-    // const countReducer = (state, action) => {
-    //     console.log('countReducer');
-    //     switch (action.type) {
-    //         case "INCREMENT":
-    //             return state + 1;
-    //         case "DECREMENT":
-    //             if (state == 0) {return 0};
-    //             return state - 1;
-    //         default:
-    //              throw new Error();
-    //     }
-    // }
-
-
 
     return (
         <SafeAreaView style={styles.container}>

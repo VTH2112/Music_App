@@ -69,6 +69,16 @@ const HomeScreen = ({ navigation }) => {
                 id={item._id} url={serverUrl + item.url} />
         )
     }
+    const PlayListCard = ({ item }) => {
+        return (
+            <PlaylistCard key={item.title}
+                name={item.title}
+                singer={item.artist}
+                artist={item.artist}
+                img={serverUrl + item.artwork}
+                id={item._id} url={serverUrl + item.url} />
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -77,9 +87,17 @@ const HomeScreen = ({ navigation }) => {
                     <View style={styles.subContainer}>
                         <Header />
                         <View style={styles.cardContainer}>
-                            {cardData.map(dat =>
-                                <PlaylistCard key={dat.name} name={dat.name} img={dat.img} duration={dat.duration} singer={dat.singer} />
-                            )}
+                            {isLoading ?
+                                <ActivityIndicator size="large" color="#90EE90" /> :
+                                <FlatList
+                                    style={styles.FlatList}
+                                    horizontal
+                                    pagingEnabled={true}
+                                    showsHorizontalScrollIndicator={true}
+                                    data={dataSong}
+                                    renderItem={PlayListCard}
+
+                                />}
                         </View>
                         <View style={styles.showContainer}>
                             <Text style={styles.text}>Show to try</Text>
@@ -132,7 +150,7 @@ const styles = StyleSheet.create({
         marginTop: 20,
         justifyContent: 'center',
         alignItems: 'center',
-        maxHeight: 210,
+        maxHeight: 390,
     },
     text: {
         color: "white",

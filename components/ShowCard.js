@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import React from 'react';
 import { useNavigation } from '@react-navigation/native';
 
@@ -7,14 +7,14 @@ const ShowCard = ({ img, name, artist, duration, singer, id, url }) => {
     //console.log('show card: ' +img, name, artist, duration, singer ,id, url)
     return (
         <View style={styles.container}>
-            <Pressable onPress={() => {
+            <TouchableOpacity onPress={() => {
                 nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url });
             }}>
                 {/* <Pressable onPress={() => nav.navigate("SingleMusicPlayer")} > */}
                 <Image style={{ height: 160, width: 160, borderRadius: 20, }} source={{ uri: img }} />
                 <Text style={styles.text} numberOfLines={1}>{name}</Text>
                 <Text style={styles.subText} numberOfLines={1}>{singer}</Text>
-            </Pressable>
+            </TouchableOpacity>
         </View>
     )
 }

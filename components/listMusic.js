@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import React, { useEffect } from 'react';
 import HeaderCard from '../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -8,7 +8,7 @@ import { IconButton, MD3Colors } from 'react-native-paper';
 const ListMusic = ({ img, name, artist, duration, singer, id, url }) => {
     const nav = useNavigation();
     return (
-        <Pressable onPress={() => {
+        <TouchableOpacity onPress={() => {
             nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url });
         }}>
             <View style={styles.listSongCont}>
@@ -31,7 +31,7 @@ const ListMusic = ({ img, name, artist, duration, singer, id, url }) => {
                     </View>
                 </View>
             </View>
-        </Pressable>
+        </TouchableOpacity>
     )
 }
 const styles = StyleSheet.create({

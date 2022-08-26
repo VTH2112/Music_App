@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Button, Image, FlatList, Modal, Alert, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Button, Image, FlatList, Modal, Alert, TouchableOpacity, TextInput, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import React, { useEffect, useState } from 'react';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -80,14 +80,14 @@ const LibraryScreen = ({ navigation }) => {
                     </View>
                     <View style={styles.cardContainer}>
                         <View style={styles.cardCreate}>
-                            <Pressable style={styles.cardIconCont} onPress={() => setShowUpload(false)}    >
+                            <TouchableOpacity style={styles.cardIconCont} onPress={() => setShowUpload(false)}    >
                                 <View style={styles.cardIcon}>
                                     <MaterialCommunityIcons name="plus" size={50} color={"#fafafa"} />
                                 </View>
                                 <View style={styles.cardText}>
                                     <Text style={styles.text}>Create Playlist</Text>
                                 </View>
-                            </Pressable>
+                            </TouchableOpacity>
 
                         </View>
                         {
@@ -104,12 +104,12 @@ const LibraryScreen = ({ navigation }) => {
 
                                 <View style={styles.centeredView}>
                                     <View style={styles.modalView}>
-                                        <Pressable
+                                        <TouchableOpacity
                                             style={[styles.button, styles.buttonClose]}
                                             onPress={() => setShowUpload(true)}
                                         >
                                             <MaterialCommunityIcons name="close" size={20} color="white" />
-                                        </Pressable>
+                                        </TouchableOpacity>
                                         <Text style={styles.modalText}>Add to Playlist</Text>
                                         <InputCard />
                                         <View style={styles.btnSub} >
@@ -161,14 +161,14 @@ const LibraryScreen = ({ navigation }) => {
                 </View>
                 <View style={styles.cardContainer}>
                     <View style={styles.cardCreate}>
-                        <Pressable style={styles.cardIconCont} onPress={() => setShowUpload(false)}    >
+                        <TouchableOpacity style={styles.cardIconCont} onPress={() => setShowUpload(false)}    >
                             <View style={styles.cardIcon}>
                                 <MaterialCommunityIcons name="plus" size={50} color={"#fafafa"} />
                             </View>
                             <View style={styles.cardText}>
                                 <Text style={styles.text}>Create Playlist</Text>
                             </View>
-                        </Pressable>
+                        </TouchableOpacity>
 
                     </View>
                     {
@@ -188,12 +188,12 @@ const LibraryScreen = ({ navigation }) => {
 
                             <View style={styles.centeredView}>
                                 <View style={styles.modalView}>
-                                    <Pressable
+                                    <TouchableOpacity
                                         style={[styles.button, styles.buttonClose]}
                                         onPress={() => setShowUpload(true)}
                                     >
                                         <MaterialCommunityIcons name="close" size={20} color="white" />
-                                    </Pressable>
+                                    </TouchableOpacity>
                                     <Text style={styles.modalText}>Add to Playlist</Text>
                                     <InputCard />
                                     <View style={styles.btnSub} >

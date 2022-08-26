@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, Image, Pressable, Animated, Easing } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Animated, Easing } from 'react-native';
 import React, { useEffect, useState, useReducer } from 'react';
 import HeaderCard from '../../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -15,35 +15,7 @@ import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { useCallback } from 'react';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { serverUrl1, server } from '../../apis/serverUrl';
-// const song =    [{
-//     title: "Anh Đã Lạc Vào",
-//     artist: 'Green, Đại Mèo Remix',
-//     artwork: require("../../assets/img/songs/0.webp"),
-//     url: require("../../assets/music/list-song/0.mp3"),
-//     id: 1,
-//     duration: 331 
-
-// },
-// {
-//     title: "Chạy Về Khóc Với Anh",
-//     artist: 'Green, Đại Mèo Remix',
-//     artwork: require("../../assets/img/songs/0.webp"),
-//     url: require("../../assets/music/list-song/1.mp3"),
-//     id: 2,
-//     duration: 331 ,
-
-// },
-// {
-//     title: 'Sẵn Sàng Yêu Em Đi Thôi',
-//     artist: 'Woni, Minh Tú, Đại Mèo Remix',
-//     artwork: require("../../assets/img/songs/0.webp"),
-//     url: require("../../assets/music/list-song/2.mp3"),
-//     id: 3,
-//     duration: 331 ,
-
-// }
-// ]
-//const serverUrl = 'http://192.168.1.5:3000/static/';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 const serverUrl = server;
 let song_ = []
 let song = []
@@ -61,6 +33,18 @@ const setUpSong = async (params) => {
         let idAudio = null
         // console.log(AsyncStorage.getItem("idAudio"));
         // console.log('id: =' + params.id);
+        TrackPlayer.setupPlayer();
+        TrackPlayer.updateOptions({
+            stopWithApp: true,
+            capabilities: [
+                Capability.Play,
+                Capability.Pause,
+                Capability.Stop,
+            ],
+        });
+        TrackPlayer.add(song_);
+        TrackPlayer.play();
+
         AsyncStorage.getItem("idAudio").then((value) => {
             idAudio = value;
             console.log("idAudio: " + idAudio)
@@ -72,8 +56,16 @@ const setUpSong = async (params) => {
                 TrackPlayer.setupPlayer();
                 TrackPlayer.add(song_);
                 TrackPlayer.play();
+                TrackPlayer.updateOptions({
+                    capabilities: [
+                        Capability.Play,
+                        Capability.Pause,
+                        Capability.SkipToNext,
+                        Capability.SkipToPrevious,
+                        Capability.Stop,
+                    ],
+                });
             }
-
         });
         // if (idAudio!=null && idAudio!== params.id) {
         //     console.log('DETROY');
@@ -82,11 +74,6 @@ const setUpSong = async (params) => {
         // }else{
         //     AsyncStorage.setItem("idAudio", params.id)   
         // }
-        await TrackPlayer.setupPlayer();
-        await TrackPlayer.add(song_);
-        await TrackPlayer.play();
-
-
         // await setTitle(song[0].title)
         // await setArtist(song[0].artwork)
         // console.log(song[0].title);
@@ -110,6 +97,7 @@ const togglePlayBack = async playBackState => {
 const spinValue = new Animated.Value(0);
 const SingleMusicPlayerScreen = ({ navigation }) => {
     const [isplay, setIsPlaying] = useState(false);
+    const [repeatMode, setRepeatMode] = useState('off');
     const route = useRoute()
     //console.log( route.params)
     const startImgSpin = () => {
@@ -123,6 +111,36 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
             startImgSpin()
         })
     }
+    const repeatIcon = () => {
+        if (repeatMode == 'off') {
+            return 'repeat-off';
+        }
+
+        if (repeatMode == 'track') {
+            return 'repeat-once';
+        }
+
+        if (repeatMode == 'repeat') {
+            return 'repeat';
+        }
+    };
+
+    const changeRepeatMode = () => {
+        if (repeatMode == 'off') {
+            TrackPlayer.setRepeatMode(RepeatMode.Track);
+            setRepeatMode('track');
+        }
+
+        if (repeatMode == 'track') {
+            TrackPlayer.setRepeatMode(RepeatMode.Queue);
+            setRepeatMode('repeat');
+        }
+
+        if (repeatMode == 'repeat') {
+            TrackPlayer.setRepeatMode(RepeatMode.Off);
+            setRepeatMode('off');
+        }
+    };
     useEffect(() => {
         setUpSong(route.params);
         navigation.setOptions({
@@ -135,6 +153,10 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
     });
     const playbackState = usePlaybackState();
     const progress = useProgress();
+    const Reset = async () => {
+        const currentTrack = await TrackPlayer.getCurrentTrack();
+        await TrackPlayer.skip(currentTrack);
+    }
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.1, y: 0.4 }} end={{ x: 1, y: 1 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
@@ -177,14 +199,15 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
                             </View>
                         </View>
                         <View style={styles.iconCont}>
-
-                            <IconButton style={styles.icon}
-                                icon="reload"
-                                color="white"
-                                size={35}
-                            // onPress={async () => Reset()}
-                            />
-                            <Pressable onPress={() => {
+                            <TouchableOpacity>
+                                <IconButton style={styles.icon}
+                                    icon="reload"
+                                    color="white"
+                                    size={35}
+                                    onPress={async () => Reset()}
+                                />
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
                                 togglePlayBack(playbackState)
                                 if (playbackState == State.Playing) {
                                     setIsPlaying(false)
@@ -199,14 +222,14 @@ const SingleMusicPlayerScreen = ({ navigation }) => {
                                     size={35}
                                 // onPress={startImgSpin}
                                 />
-                            </Pressable>
-                            <Pressable>
-                                <IconButton style={styles.icon}
-                                    icon="shuffle-variant"
-                                    color="white"
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={changeRepeatMode}>
+                                <MaterialCommunityIcons style={styles.iconRepeat}
+                                    name={`${repeatIcon()}`}
                                     size={35}
+                                    color={repeatMode !== 'off' ? '#FFD369' : '#888888'}
                                 />
-                            </Pressable >
+                            </TouchableOpacity>
                         </View>
                     </View>
                     <View style={styles.songCont}>
@@ -334,6 +357,11 @@ const styles = StyleSheet.create({
         height: 40,
         marginTop: 25,
         flexDirection: 'row',
+    },
+
+    iconRepeat:{
+        marginTop:14,
+        marginLeft:10,
     },
 
 })

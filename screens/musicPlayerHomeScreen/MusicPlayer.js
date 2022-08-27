@@ -12,35 +12,32 @@ import TrackPlayer, { Capability, Event, RepeatMode, State, useProgress, useTrac
 import Slider from '@react-native-community/slider';
 import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { server, serverURL } from '../../apis/Serverurl';
-import { TurboModuleRegistry } from 'react-native';
 let song_ = []
 let song = []
+let singleSong = []
 const MusicPlayerScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
+    const [isShow, setIsShow] = useState(true);
     const [isLoading, setIsLoading] = useState(true);
     const route = useRoute();
-    const playbackState = usePlaybackState();
-    const progress = useProgress();
-    const [title, setTitle] = useState("")
-    const [artwork, setArtwork] = useState("")
-    const [songindex, setSongindex] = useState(0)
-
     const getSong = async (id) => {
-        const res = await axiosIntance.get("/playlist/"+id, {
+        const res = await axiosIntance.get("/playlist/" + id, {
             // params:{
             //     id: "62fbcb17e8588f32cbea05b7"
             // }
         }).then(
-            res => 
-            {
+            res => {
                 console.log("id: ");
                 console.log(id);
                 song_ = res.data[0].songList
+                setData(song_)
             }
-
         ).catch(error => {
             console.log(error)
+        }).finally(() => {
+            setIsLoading(false)
         });
 
     }
@@ -49,7 +46,6 @@ const MusicPlayerScreen = ({ navigation }) => {
         console.log(id)
         await getSong(id)
         console.log(song_);
-        setIsLoading(false);
         song_.map(item => {
             song.push({
                 title: item.title,
@@ -60,10 +56,11 @@ const MusicPlayerScreen = ({ navigation }) => {
                 duration: item.duration
             })
         })
-    
-    
         try {
-            
+
+
+            // console.log(AsyncStorage.getItem("idAudio"));
+            // console.log('id: =' + params.id);
             await TrackPlayer.setupPlayer();
             await TrackPlayer.add(song);
             await TrackPlayer.play();
@@ -90,6 +87,19 @@ const MusicPlayerScreen = ({ navigation }) => {
         }
     }
 
+
+    useEffect(() => {
+        setupPlayer(route.params.id)
+        navigation.setOptions({
+            headerShown: false,
+        });
+        // TrackPlayer.play();
+        // scrollX.addListener(({value}) =>{
+        //     const index = Math.round(value/width);
+        //     skipto(index);
+        //     setSongIndex(index)
+        // })
+    }, [])
     const listCard = ({ item }) => {
         return (
             <ListMusic key={item.title}
@@ -101,18 +111,53 @@ const MusicPlayerScreen = ({ navigation }) => {
         )
     }
 
-    useEffect(() => {
-        setupPlayer(route.params.id)
-        //setTitle(song[0].title)
-        // TrackPlayer.play();
-        // scrollX.addListener(({value}) =>{
-        //     const index = Math.round(value/width);
-        //     skipto(index);
-        //     setSongIndex(index)
-        // })
-    }, [])
+    const playbackState = usePlaybackState();
+    const progress = useProgress();
+    const [title, setTitle] = useState("")
+    const [artwork, setArtwork] = useState("")
+    const [songindex, setSongindex] = useState(0)
 
+    let idAudio = null
 
+    AsyncStorage.getItem("idAudio").then((value) => {
+        idAudio = value;
+
+        console.log("idAudio: " + idAudio)
+        console.log("params.id: " + route.params.id)
+        song.map(item => {
+            if (item.title === route.params.name) {
+                singleSong = [{
+                    title: route.params.name,
+                    id: route.params.id,
+                    artist: route.params.artist,
+                    url: route.params.url,
+                    artwork: route.params.artwork,
+                    duration: route.params.duration
+                }]
+                // console.log(item.title);
+                // console.log(route.params.name);
+                item.id = route.params.id
+                // console.log(item);
+                if (idAudio !== route.params.id) {
+                    console.log('DETROY');
+                    TrackPlayer.reset();
+                    AsyncStorage.setItem("idAudio", route.params.id);
+                    TrackPlayer.setupPlayer();
+                    TrackPlayer.add(singleSong);
+                    TrackPlayer.play();
+                    TrackPlayer.updateOptions({
+                        capabilities: [
+                            Capability.Play,
+                            Capability.Pause,
+                            Capability.SkipToNext,
+                            Capability.SkipToPrevious,
+                            Capability.Stop,
+                        ],
+                    });
+                }
+            }
+        })
+    })
     const Next = async () => {
         await TrackPlayer.skipToNext();
         let newIndex = 0;
@@ -129,17 +174,18 @@ const MusicPlayerScreen = ({ navigation }) => {
         await setTitle(song[newIndex].title)
         await setArtwork(song[newIndex].artwork)
     }
-
     return (
         <SafeAreaView style={styles.container}>
             <HeaderCard />
             <View style={styles.headContainer}>
-                <View style={styles.textCont}>
-                    <Text style={styles.text}>{route.params.name}
-                    </Text>
-                </View>
-                <View style={styles.imgDisk}>
-                    <Image style={{ height: 330, width: 330, borderRadius: 330 / 2 }} resizeMode={"cover"} source={{ uri: route.params.img }} />
+                <View style={styles.headerCont}>
+                    <View style={styles.textCont}>
+                        <Text style={styles.text}>{isShow ? route.params.name : title}
+                        </Text>
+                    </View>
+                    <View style={styles.imgDisk}>
+                        <Image style={{ height: 330, width: 330, borderRadius: 330 / 2 }} resizeMode={"cover"} source={{ uri: isShow ? route.params.img : artwork }} />
+                    </View>
                 </View>
                 <Slider
                     value={progress.position}
@@ -173,7 +219,10 @@ const MusicPlayerScreen = ({ navigation }) => {
                     //     navigation.navigate('#')
                     // }}
                     />
-                    <Pressable onPress={async () => Pre()} >
+                    <Pressable onPress={async () => {
+                        Pre()
+                        setIsShow(false)
+                    }} >
                         <IconButton style={styles.icon}
                             icon="step-backward"
                             color="white"
@@ -189,7 +238,10 @@ const MusicPlayerScreen = ({ navigation }) => {
                         //onPress={() => { navigation.navigate('#') }}
                         />
                     </Pressable>
-                    <Pressable onPress={async () => Next()} >
+                    <Pressable onPress={async () => {
+                        Next()
+                        setIsShow(false)
+                    }} >
                         <IconButton style={styles.icon}
                             icon="step-forward"
                             color="white"
@@ -224,11 +276,13 @@ const MusicPlayerScreen = ({ navigation }) => {
                         <Text style={styles.duration}>{route.params.duration}</Text>
                     </View>
                 </View> */}
-                <FlatList
-                    showsHorizontalScrollIndicator={false}
-                    data={data}
-                    renderItem={listCard}
-                />
+                {isLoading ? <ActivityIndicator size="large" color="#90EE90" /> :
+                    <FlatList
+                        showsHorizontalScrollIndicator={false}
+                        data={data}
+                        renderItem={listCard}
+                    />
+                }
 
             </View>
         </SafeAreaView>
@@ -254,6 +308,7 @@ const styles = StyleSheet.create({
     headContainer: {
         flex: 1,
         marginTop: 120,
+        marginBottom: 40,
         justifyContent: 'center',
         alignItems: 'center',
     },
@@ -323,6 +378,10 @@ const styles = StyleSheet.create({
         marginTop: 130,
         width: 300,
         flex: 1
+    }
+    , headerCont: {
+        alignItems: 'center',
+        marginTop: 10,
     }
 
 

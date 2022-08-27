@@ -6,10 +6,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Evillcons from 'react-native-vector-icons/EvilIcons';
 import { cardData, showCardData, MixCardData } from '../data/Data';
 import LibraryCard from '../components/LibraryCard';
-import { serverUrl1, server } from '../apis/Serverurl';
+import { serverURL, server } from '../apis/Serverurl';
 import InputCard from '../components/inputCard';
 
-const serverUrl = server;
+const serverUrl = serverURL;
 
 const LibraryScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
@@ -18,7 +18,7 @@ const LibraryScreen = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        fetch('http://192.168.1.5:3000/song')
+        fetch(server + '/song')
             .then(res => {
                 return res.json()
             })

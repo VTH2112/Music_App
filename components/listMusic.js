@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity } from 'react-native';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import HeaderCard from '../components/HeaderCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient'
@@ -7,9 +7,11 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import { IconButton, MD3Colors } from 'react-native-paper';
 const ListMusic = ({ img, name, artist, duration, singer, id, url }) => {
     const nav = useNavigation();
+    const [isShow, setIsShow] = useState(true);
     return (
         <TouchableOpacity onPress={() => {
-            nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url });
+            nav.navigate("MusicPlayer", { name: name, duration: duration, singer: singer, img: img, id: id, url: url })
+            setIsShow(true);
         }}>
             <View style={styles.listSongCont}>
                 <View style={styles.listSongBorder}>

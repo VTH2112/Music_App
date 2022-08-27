@@ -1,10 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import React, {useContext} from 'react';
 import { IconButton, MD3Colors } from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
+import { AuthContext } from "../context/auth";
 const HeaderUser = () => {
     const navigation = useNavigation();
+    const userCtx = useContext(AuthContext)
     return (
         <View style={styles.topCont}>
             <View style={styles.header}>
@@ -19,7 +21,7 @@ const HeaderUser = () => {
                     />
                 </View>
                 <View style={styles.iconCenter}>
-                    <Text style={styles.text}>User</Text>
+                    <Text style={styles.text}>{userCtx.user}</Text>
                 </View>
                 <View style={styles.iconRight}>
                     <IconButton style={styles.icon}

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, ScrollView, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 import React, { useEffect, useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../components/Header';
@@ -10,15 +10,52 @@ import { cardData, showCardData, MixCardData } from '../data/Data';
 import MixCard from '../components/MixCard';
 import { serverURL, server } from '../apis/Serverurl';
 
-
+const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+}
 // console.log(cardData);
 // console.log(cardData.map(dat => dat.img));
 const HomeScreen = ({ navigation }) => {
-
+    const [refreshing, setRefreshing] = React.useState(false);
     const [data, setData] = useState([]);
     const [dataSong, setDataSong] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [dataPlaylist, setPlaylist] = useState([]);
+
+    const onRefresh = React.useCallback(() => {
+        setRefreshing(true);
+        wait(2000).then(() => setRefreshing(false));
+        fetch(server +"/song")
+        .then(res => {
+            return res.json()
+        })
+        .then(resJson => {
+            setDataSong(resJson)
+            console.log(resJson)
+        }).finally(() => {
+            setIsLoading(false)
+        })
+    navigation.setOptions({
+        headerShown: false,
+    });
+
+    fetch(server +"/playlist")
+        .then(res => {
+            return res.json()
+        })
+        .then(resJson => {
+            setPlaylist(resJson)
+            console.log("data playlist: ")
+            console.log(resJson)
+        }).finally(() => {
+            setIsLoading(false)
+        })
+    navigation.setOptions({
+        headerShown: false,
+    });
+      }, []);
+
+
     useEffect(() => {
 
         fetch(server +"/song")
@@ -86,7 +123,12 @@ const HomeScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
             <LinearGradient colors={['#5d5640', '#111', '#111', '#111', '#111', '#111']} start={{ x: -0.3, y: 0.2 }} end={{ x: 1, y: 1.2 }} location={[0.01, 0.2, 0.3, 1, 1, 1]}>
-                <ScrollView>
+                <ScrollView    refreshControl={
+                    <RefreshControl
+                        refreshing={refreshing}
+                        onRefresh={onRefresh}
+                    />} 
+                >
                     <View style={styles.subContainer}>
                         <Header />
                         <View style={styles.cardContainer}>

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View, ScrollView, Button, Image, TextInput, Pressable ,TouchableOpacity} from 'react-native';
-import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, ScrollView, Button, Image, TextInput, Pressable ,TouchableOpacity, Alert} from 'react-native';
+import React, { useEffect, useState, useContext } from 'react';
 import HeaderUser from '../components/headerUser';
 import SignInScreen from './LoginScreen';
 import SignUpScreen from './RegisterScreen';
@@ -7,9 +7,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import LinearGradient from 'react-native-linear-gradient';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { useNavigation } from '@react-navigation/native';
-
-
-
+import DocumentPicker from 'react-native-document-picker';
+import FormData from 'form-data';
+import { server } from '../apis/Serverurl';
+import axiosIntance, { updateToken } from "../apis/axios";
+import axios from 'axios';
+import { ListAccordionGroupContext } from 'react-native-paper/lib/typescript/components/List/ListAccordionGroup';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AuthContext } from "../context/auth";
 const UserScreen = ({ navigation }) => {
     const [showUpload, setShowUpload] = useState(false);
     const [Title, onChangeTitle] = React.useState("");
@@ -17,6 +22,105 @@ const UserScreen = ({ navigation }) => {
     const [Artworks, onChangeArtworks] = React.useState("");
     const [Url, onChangeUrl] = React.useState("");
     const [Type, onChangeType] = React.useState("");
+    const [fileAudio, setFileAudio] = React.useState();
+    const [fileIMG, setFileIMG] = React.useState();
+    const userCtx = useContext(AuthContext)
+
+
+    const openImgFile = async() =>{
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.images],
+            })
+            console.log(res)
+            onChangeArtworks(res[0].name)
+            setFileIMG({
+                uri: res[0].uri,
+                type: res[0].type,
+                name: res[0].name
+            });
+        } catch (error) {
+            if (DocumentPicker.isCancel){
+                
+            }
+        }
+
+        
+    }
+    const openMP3File = async() =>{
+        try {
+            const res = await DocumentPicker.pick({
+                type: [DocumentPicker.types.audio],
+            })
+            //console.log(res[0].name)
+            onChangeUrl(res[0].name)
+            setFileAudio({
+                uri: res[0].uri,
+                type: res[0].type,
+                name: res[0].name
+            });
+        } catch (error) {
+            if (DocumentPicker.isCancel){
+                
+            }
+        }
+
+    }
+    const Logout = async() =>{
+        console.log('Logout');
+        await userCtx.setUser(null);
+        await updateToken(null);
+        await AsyncStorage.setItem('token', null)
+    }
+    const submidHandler = async() =>{
+        const formdata = new FormData()
+        // formdata.append('files', [fileAudio, fileIMG])
+        formdata.append('audio',fileAudio)
+        formdata.append('img', fileIMG)
+        formdata.append('title', Title)
+        formdata.append('artist', Artists)
+        formdata.append('duration', 331)
+        formdata.append('owner', userCtx.user)
+        formdata.append('type', Type)
+        //console.log(formdata)
+        //formData.append('formdata', JSON.stringify(data));
+        const res = await axiosIntance.post('/song', formdata, { headers:{
+            'Content-Type': 'multipart/form-data'
+        }}).then(
+            res => 
+            {
+                Alert.alert(
+                    //title
+                    'RESULT:',
+                    //body
+                    'UPLOAD IS OKAY!',
+                    [
+                      {
+                        text: 'OK',
+                        onPress: () => console.log('No Pressed'), style: 'cancel'
+                      },
+                    ],
+                    {cancelable: false},
+                    //clicking out side of alert will not cancel
+                  );
+                  onChangeTitle("");
+                  onChangeArtists("");
+                  onChangeUrl("");
+                  onChangeArtworks("");
+                  onChangeType("");
+                  setFileAudio();
+                  setFileIMG(); 
+                  
+            }
+
+        ).catch(error => {
+            console.log(error)
+        });
+        
+
+    }
+    
+
     useEffect(() => {
         navigation.setOptions({
             headerShown: false,
@@ -35,20 +139,20 @@ const UserScreen = ({ navigation }) => {
                         </View>
                         <View style={styles.btn} >
                             <Button
-                                onPress={() => { nav.navigate('LoginScreen') }}
-                                title="Sign In"
+                                onPress={() => Logout()}
+                                title="Logout"
                                 color="black"
                                 style={styles.signInBtn}
                             />
                         </View>
-                        <View style={styles.btn} >
+                        {/* <View style={styles.btn} >
                             <Button
                                 onPress={() => { nav.navigate('RegisterScreen') }}
                                 title="Sign Up"
                                 color="black"
                                 style={styles.signUpBtn}
                             />
-                        </View>
+                        </View> */}
                     </View>
                     <View style={styles.centerCont}>
                         <View style={styles.textHeadBorder}>
@@ -159,6 +263,13 @@ const UserScreen = ({ navigation }) => {
                                             placeholderTextColor="#b1b2b7"
                                             value={Artworks}
                                             style={styles.input}
+                                            editable={false}
+                                        />
+                                        <Button
+                                            onPress={() => openImgFile()}
+                                            title="Upload img"
+                                            color="#8A2BE2"
+                                            style={styles.btnSub}
                                         />
                                         <TextInput
                                             placeholder="Music Url"
@@ -166,6 +277,13 @@ const UserScreen = ({ navigation }) => {
                                             onChangeText={onChangeUrl}
                                             value={Url}
                                             style={styles.input}
+                                            editable={false}
+                                        />
+                                        <Button
+                                            onPress={() =>  openMP3File()}
+                                            title="Upload mp3"
+                                            color="#8A2BE2"
+                                            style={styles.btnSub}
                                         />
                                         <TextInput
                                             placeholder="Type"
@@ -177,7 +295,7 @@ const UserScreen = ({ navigation }) => {
                                     </View>
                                     <View style={styles.btnSub} >
                                         <Button
-                                            onPress={() => { nav.navigate('RegisterScreen') }}
+                                            onPress={() => submidHandler()}
                                             title="Submit"
                                             color="#8A2BE2"
                                             style={styles.btnSub}

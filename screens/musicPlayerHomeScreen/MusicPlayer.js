@@ -13,12 +13,18 @@ import Slider from '@react-native-community/slider';
 import axiosIntance, { updateToken } from "../../apis/axios";
 import { Item } from 'react-native-paper/lib/typescript/components/List/List';
 import { server, serverURL } from '../../apis/Serverurl';
+import { TurboModuleRegistry } from 'react-native';
 let song_ = []
 let song = []
 const MusicPlayerScreen = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const route = useRoute();
+    const playbackState = usePlaybackState();
+    const progress = useProgress();
+    const [title, setTitle] = useState("")
+    const [artwork, setArtwork] = useState("")
+    const [songindex, setSongindex] = useState(0)
 
     const getSong = async (id) => {
         const res = await axiosIntance.get("/playlist/"+id, {
@@ -43,6 +49,7 @@ const MusicPlayerScreen = ({ navigation }) => {
         console.log(id)
         await getSong(id)
         console.log(song_);
+        setIsLoading(false);
         song_.map(item => {
             song.push({
                 title: item.title,
@@ -56,6 +63,7 @@ const MusicPlayerScreen = ({ navigation }) => {
     
     
         try {
+            
             await TrackPlayer.setupPlayer();
             await TrackPlayer.add(song);
             await TrackPlayer.play();
@@ -82,17 +90,6 @@ const MusicPlayerScreen = ({ navigation }) => {
         }
     }
 
-
-    useEffect(() => {
-        setupPlayer(route.params.id)
-        //setTitle(song[0].title)
-        // TrackPlayer.play();
-        // scrollX.addListener(({value}) =>{
-        //     const index = Math.round(value/width);
-        //     skipto(index);
-        //     setSongIndex(index)
-        // })
-    }, [])
     const listCard = ({ item }) => {
         return (
             <ListMusic key={item.title}
@@ -104,11 +101,17 @@ const MusicPlayerScreen = ({ navigation }) => {
         )
     }
 
-    const playbackState = usePlaybackState();
-    const progress = useProgress();
-    const [title, setTitle] = useState("")
-    const [artwork, setArtwork] = useState("")
-    const [songindex, setSongindex] = useState(0)
+    useEffect(() => {
+        setupPlayer(route.params.id)
+        //setTitle(song[0].title)
+        // TrackPlayer.play();
+        // scrollX.addListener(({value}) =>{
+        //     const index = Math.round(value/width);
+        //     skipto(index);
+        //     setSongIndex(index)
+        // })
+    }, [])
+
 
     const Next = async () => {
         await TrackPlayer.skipToNext();
@@ -221,11 +224,11 @@ const MusicPlayerScreen = ({ navigation }) => {
                         <Text style={styles.duration}>{route.params.duration}</Text>
                     </View>
                 </View> */}
-                {isLoading ? <ActivityIndicator size="large" color="#90EE90" /> : <FlatList
+                <FlatList
                     showsHorizontalScrollIndicator={false}
                     data={data}
                     renderItem={listCard}
-                />}
+                />
 
             </View>
         </SafeAreaView>
